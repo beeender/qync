@@ -1,0 +1,3 @@
+[submodule "siplcs"]
+	path = siplcs
+	url = git://repo.or.cz/siplcs.git
