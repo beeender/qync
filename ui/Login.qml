@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.1
+import QyncSipe 1.0
 
 Rectangle {
     id: loginPanel
@@ -93,7 +94,7 @@ Rectangle {
         id: waitingColumn
         y: 120
         height: 118
-        visible: false
+        opacity: 0
         anchors.right: parent.right
         anchors.rightMargin: 30
         anchors.left: parent.left
@@ -119,36 +120,18 @@ Rectangle {
 
         Button {
             id: cancelButton
-            text: qsTr("Button")
+            text: qsTr("Cancel")
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 0
             anchors.horizontalCenter: parent.horizontalCenter
         }
     }
 
-    MouseArea {
-        id: mouseArea1
-        x: 30
-        y: 307
-        width: 80
-            height: 58
-        }
-
     states: [
 
         State {
             name: "WAITING"
-            when: mouseArea1.pressed == true
-
-            PropertyChanges {
-                target: startColumn
-                visible: true
-            }
-
-            PropertyChanges {
-                target: waitingColumn
-                visible: true
-            }
+            when: qyncSipe.status == QyncSipe.InProcess
 
             PropertyChanges {
                 target: emailTextField
@@ -170,6 +153,11 @@ Rectangle {
                 enabled: false
                 checkable: false
             }
+
+            PropertyChanges {
+                target: waitingColumn
+                opacity: 0
+            }
         }
     ]
 
@@ -177,24 +165,42 @@ Rectangle {
         Transition {
             from: ""
             to: "WAITING"
-            reversible: true
             SequentialAnimation {
-                id: animateOpacity
                 NumberAnimation {
                     target: startColumn
-                    duration: 1050
+                    duration: 200
                     properties: "opacity"
                     from: 1
                     to: 0
                     easing {type: Easing.OutQuad}
                 }
-                PropertyAnimation {
-                    target: startColumn
-                    properties: "visible"; easing.type: Easing.InOutQuad
-                }
                 NumberAnimation {
                     target: waitingColumn
-                    duration: 1000
+                    duration: 500
+                    properties: "opacity"
+                    from: 0
+                    to: 1
+                    easing {type: Easing.OutQuad}
+                }
+            }
+
+        },
+
+        Transition {
+            from: "WAITING"
+            to: ""
+            SequentialAnimation {
+                NumberAnimation {
+                    target: waitingColumn
+                    duration: 200
+                    properties: "opacity"
+                    from: 1
+                    to: 0
+                    easing {type: Easing.OutQuad}
+                }
+                NumberAnimation {
+                    target: startColumn
+                    duration: 500
                     properties: "opacity"
                     from: 0
                     to: 1
