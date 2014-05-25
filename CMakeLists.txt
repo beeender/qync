@@ -157,12 +157,11 @@ aux_source_directory("sipe-qync/" sipe-backend-files)
 add_library(sipe-qync STATIC ${sipe-core-files} ${sipe-backend-files})
 qt5_use_modules(sipe-qync Network)
 
-include_directories("core/")
-aux_source_directory("core/" core-files)
-add_executable(qync qync.cpp ${core-files})
+include_directories("sipe-qync")
+add_executable(qync qync.cpp)
 add_dependencies(qync sipe-qync)
 # Use the Widgets module from Qt 5.
-qt5_use_modules(qync Widgets Network Qml Quick)
+qt5_use_modules(qync Widgets Network Qml Quick Declarative)
 target_link_libraries(qync ${PROJECT_BINARY_DIR}/libsipe-qync.a
     ${GLIB_LIBRARIES} ${GMIME26_LIBRARIES} ${OPENSSL_LIBRARIES} ${XML2_LIBRARIES})
 

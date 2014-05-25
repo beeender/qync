@@ -4,13 +4,16 @@
 #include "sipe-core.h"
 
 #include <QThread>
+#include <QStringList>
 
 QyncSipe::QyncSipe(QObject* parent)
     :QObject(parent), mAccountName(""), mDomainUser(""), mPassword(""),
     mEmail(""), mEmailUrl(""), mSso(FALSE),
-    mSipePublic(0), mLoginManager(this)
+    mSipePublic(0), mSipeThread(), mLoginManager(this), mStatus(Idle)
 {
     sipe_core_init("");
+    mLoginManager.moveToThread(&mSipeThread);
+    mSipeThread.start();
 }
 
 QyncSipe::~QyncSipe()
@@ -20,11 +23,10 @@ QyncSipe::~QyncSipe()
 
 bool QyncSipe::start()
 {
-    qDebug("THREAD TEST 0x%08x QyncSipe::start", QThread::currentThreadId());
     const gchar *errmsg;
 
     gchar *username = (gchar *)mAccountName.toStdString().c_str();
-    QStringList domainUser = mDomainUser.split("\\", QString::SkipEmptyParts);
+    QStringList domainUser = mDomainUser.split("\\", QString::KeepEmptyParts);
 
     int tmpstatus;
     int ttype = SIPE_TRANSPORT_AUTO;
@@ -33,16 +35,25 @@ bool QyncSipe::start()
     mSipePublic = sipe_core_allocate(
             mAccountName.toStdString().c_str(),
             mSso,
-            domainUser.size() ? domainUser[0].toStdString().c_str() : NULL,
-            domainUser.size() ? domainUser[1].toStdString().c_str() : NULL,
+            domainUser.size() == 2 ? domainUser[0].toStdString().c_str() : NULL,
+            domainUser.size() == 2 ?
+                domainUser[1].toStdString().c_str() : domainUser[0].toStdString().c_str(),
             mPassword.toStdString().c_str(),
             mEmail.toStdString().c_str(),
             mEmailUrl.toStdString().c_str(),
             &errmsg);
 
-    mSipePublic->backend_private = (struct sipe_backend_private *)this;
+    if (!mSipePublic) return false;
 
+    mSipePublic->backend_private = (struct sipe_backend_private *)this;
     emit mLoginManager.login();
+
     return true;
+}
+
+void QyncSipe::setStatus(LoginStatusE s)
+{
+    mStatus = s;
+    emit statusChanged();
 }
 

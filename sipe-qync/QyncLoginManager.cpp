@@ -2,12 +2,11 @@
 
 #include "sipe-core.h"
 
-#include <QyncSipe.h>
-#include <QyncLoginManager.h>
-#include <QThread>
+#include "QyncSipe.h"
+#include "QyncLoginManager.h"
 
-QyncLoginManager::QyncLoginManager(QObject *parent)
-    :QObject(parent), mStatus(IDLE)
+QyncLoginManager::QyncLoginManager(QyncSipe *qyncSipe, QObject *parent)
+    :mQyncSipe(qyncSipe), QObject(parent)
 {
     connect(this, SIGNAL(login()), this, SLOT(doLogin()));
 }
@@ -18,13 +17,13 @@ QyncLoginManager::~QyncLoginManager()
 
 void QyncLoginManager::doLogin()
 {
-    qDebug("THREAD TEST 0x%08x QyncLoginManager::doLogin", QThread::currentThreadId());
+    mQyncSipe->setStatus(QyncSipe::InProcess);
     int tmpstatus;
     int ttype = SIPE_TRANSPORT_AUTO;
     guint authentication_type = SIPE_AUTHENTICATION_TYPE_NTLM;
 
     sipe_core_transport_sip_connect(
-            ((QyncSipe *)parent())->getSipePublic(),
+            mQyncSipe->getSipePublic(),
             ttype,
             authentication_type,
             NULL,
