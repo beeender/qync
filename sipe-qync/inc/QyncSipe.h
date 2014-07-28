@@ -10,8 +10,8 @@
 #include "QyncBuddyListModel.h"
 
 #include "QyncDB.h"
-#include "QyncBackend.h"
 
+class QyncBackend;
 class QyncSipe : public QObject
 {
     Q_OBJECT
@@ -25,7 +25,6 @@ class QyncSipe : public QObject
     Q_ENUMS(LoginStatusE)
     Q_PROPERTY(LoginStatusE status READ getStatus NOTIFY statusChanged)
 
-    friend class QyncBackend;
 
     public:
         enum LoginStatusE {
@@ -46,6 +45,11 @@ class QyncSipe : public QObject
         struct sipe_core_public *getSipePublic() const { return mSipePublic; };
         LoginStatusE getStatus() { return mStatus; };
         QyncBuddyListModel *getBuddyListModel() const { return mBuddyListModel; };
+
+        void setStatus(LoginStatusE s);
+        bool addGroup(const QString &group);
+        QyncBuddyObject *findBuddy(const QString &buddyName, const QString &groupName);
+        QyncBuddyObject *addBuddy(const QString &buddyName, const QString &alias, const QString &groupName);
     private:
         QString mAccountName;
         QString mDomainUser;
@@ -59,17 +63,13 @@ class QyncSipe : public QObject
         QyncBuddyListModel *mBuddyListModel;
 
         QThread mSipeThread;
-        QyncBackend mBackend;
+        QyncBackend *mBackend;
         QyncDB mDb;
 
         struct sipe_core_public *mSipePublic;
 
         LoginStatusE mStatus;
 
-        void setStatus(LoginStatusE s);
-        bool addGroup(const QString &group);
-        QyncBuddyObject *findBuddy(const QString &buddyName, const QString &groupName);
-        QyncBuddyObject *addBuddy(const QString &buddyName, const QString &alias, const QString &groupName);
 
     private slots:
 

@@ -3,17 +3,20 @@
 
 #include "sipe-core.h"
 
+#include "QyncBackend.h"
+
 
 QyncSipe::QyncSipe(QObject* parent)
     :QObject(parent), mAccountName(""), mDomainUser(""), mPassword(""),
     mEmail(""), mEmailUrl(""), mSso(FALSE), mDb(),
-    mSipePublic(NULL), mSipeThread(), mBackend(this), mStatus(StatusOffline),
-    mBuddyList(NULL), mGroupList(NULL) 
+    mSipePublic(NULL), mSipeThread(), mStatus(StatusOffline),
+    mBuddyList(NULL), mGroupList(NULL)
 {
     mGroupList = mDb.getGroupList();
     mBuddyList = mDb.getBuddyList();
 
-    mBackend.moveToThread(&mSipeThread);
+    mBackend = new QyncBackend(this);
+    mBackend->moveToThread(&mSipeThread);
     mSipeThread.start();
 
     mBuddyListModel = new QyncBuddyListModel();
@@ -21,6 +24,7 @@ QyncSipe::QyncSipe(QObject* parent)
 
 QyncSipe::~QyncSipe()
 {
+    delete mBackend;
     delete mBuddyListModel;
 }
 
@@ -38,7 +42,7 @@ bool QyncSipe::start()
     foreach(QyncBuddyObject *buddy, *mBuddyList) {
         mBuddyListModel->addBuddy(*buddy);
     }
-    emit mBackend.login(loginInfo);
+    emit mBackend->login(loginInfo);
 
     return true;
 }
@@ -72,4 +76,3 @@ QyncBuddyObject *QyncSipe::addBuddy(const QString &buddyName, const QString &ali
     mBuddyListModel->addBuddy(*buddy);
     return buddy;
 }
-

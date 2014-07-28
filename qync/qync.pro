@@ -5,6 +5,8 @@ QT += qml quick widgets sql
 #TODO:Remove this.
 CONFIG += link_pkgconfig
 PKGCONFIG += glib-2.0
+PKGCONFIG += openssl
+PKGCONFIG += gobject-2.0
 
 SOURCES += \
     qync.cpp
