@@ -24,6 +24,7 @@ include_directories(${OPENSSL_INCLUDE_DIRS})
 include_directories(${XML2_INCLUDE_DIRS})
 
 message(STATUS "link dir: -${SSL_INCLUDE_DIRS}")
+message(STATUS "link dir: -${XML2_LIBRARIES}")
 
 file (STRINGS "siplcs/VERSION" package-version)
 add_definitions(-DPACKAGE_VERSION="${package-version}")
@@ -152,16 +153,19 @@ set(sipe-core-files ${sipe-core-files}
     #siplcs/src/core/sdpmsg.h
     #siplcs/src/core/sdpmsg.c)
 
-aux_source_directory("sipe-qync/" sipe-backend-files)
+aux_source_directory("sipe-qync/src" sipe-backend-src-files)
+aux_source_directory("sipe-qync/inc" sipe-backend-inc-files)
 
-add_library(sipe-qync STATIC ${sipe-core-files} ${sipe-backend-files})
-qt5_use_modules(sipe-qync Network)
+add_library(sipe-qync STATIC ${sipe-core-files}
+    ${sipe-backend-src-files} ${sipe-backend-inc-files})
+qt5_use_modules(sipe-qync Network Sql)
 
-include_directories("sipe-qync")
+include_directories("sipe-qync/inc")
+include_directories("sipe-qync/src")
 add_executable(qync qync.cpp)
 add_dependencies(qync sipe-qync)
 # Use the Widgets module from Qt 5.
-qt5_use_modules(qync Widgets Network Qml Quick Declarative)
+qt5_use_modules(qync Widgets Network Qml Quick Declarative Sql)
 target_link_libraries(qync ${PROJECT_BINARY_DIR}/libsipe-qync.a
     ${GLIB_LIBRARIES} ${GMIME26_LIBRARIES} ${OPENSSL_LIBRARIES} ${XML2_LIBRARIES})
 
