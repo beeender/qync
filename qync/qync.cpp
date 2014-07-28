@@ -1,4 +1,3 @@
-#include <glib.h>
 #include <QApplication>
 #include <QtQml/QQmlApplicationEngine>
 #include <QtQml/QQmlContext>
@@ -6,6 +5,8 @@
 #include <QtQuick/QQuickView>
 
 #include "QyncSipe.h"
+
+#include "QyncBuddyListModel.h"
 
 int main(int argc, char **argv)
 {
@@ -17,9 +18,17 @@ int main(int argc, char **argv)
 
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("qyncSipe", qyncSipe);
+    engine.rootContext()->setContextProperty("buddyListModel", qyncSipe->getBuddyListModel());
+#if 0
+    QyncBuddyListModel listModel;
+    QyncBuddyObject o1("test1");
+    QyncBuddyObject o2("test2");
+    listModel.addBuddy(o1);
+    listModel.addBuddy(o2);
+    engine.rootContext()->setContextProperty("buddyListModel", &listModel);
+#endif
     engine.load(QUrl::fromLocalFile("ui/QyncApp.qml"));
 
     return app.exec();
 }
 
-#include "qync.moc"

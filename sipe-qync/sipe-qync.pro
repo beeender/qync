@@ -11,6 +11,7 @@ QT       -= gui
 TARGET = sipe-qync
 TEMPLATE = lib
 CONFIG += staticlib
+CONFIG += create_prl
 
 DEFINES += SIPEQYNC_LIBRARY
 
@@ -19,6 +20,7 @@ CONFIG += link_pkgconfig
 PKGCONFIG += glib-2.0
 PKGCONFIG += gmime-2.6
 PKGCONFIG += libxml-2.0
+PKGCONFIG += openssl
 
 DEFINES += PACKAGE_VERSION=\\\"$$system(cat ./siplcs/VERSION)\\\"
 DEFINES += PACKAGE_URL=\\\"http://sipe.sourceforge.net/\\\"
@@ -106,7 +108,7 @@ SOURCES += \
 INCLUDEPATH += inc/ siplcs/src/api/
 
 HEADERS +=\
-        sipe-qync_global.h \
+    sipe-qync_global.h \
     inc/QyncBackend.h \
     inc/QyncBuddyListModel.h \
     inc/QyncBuddyObject.h \

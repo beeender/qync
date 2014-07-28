@@ -5,11 +5,12 @@
 #include <QThread>
 #include <QList>
 
-#include "QyncBackend.h"
-#include "QyncDB.h"
 #include "QyncBuddyObject.h"
 #include "QyncGroupObject.h"
 #include "QyncBuddyListModel.h"
+
+#include "QyncDB.h"
+#include "QyncBackend.h"
 
 class QyncSipe : public QObject
 {
