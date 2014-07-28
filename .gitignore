@@ -3,3 +3,4 @@ cscope.in.out
 cscope.out
 cscope.po.out
 .ycm_extra_conf.pyc
+*.user
