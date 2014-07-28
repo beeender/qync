@@ -6,11 +6,14 @@ void sipe_backend_search_failed(struct sipe_core_public *sipe_public,
 				struct sipe_backend_search_token *token,
 				const gchar *msg)
 {
+	SIPE_DEBUG_INFO_NOFORMAT("STUB sipe_backend_search_failed");
 }
 
 struct sipe_backend_search_results *sipe_backend_search_results_start(struct sipe_core_public *sipe_public,
 								      struct sipe_backend_search_token *token)
 {
+	SIPE_DEBUG_INFO_NOFORMAT("STUB sipe_backend_search_results_start");
+    return 0;
 }
 
 void sipe_backend_search_results_add(struct sipe_core_public *sipe_public,
@@ -21,6 +24,7 @@ void sipe_backend_search_results_add(struct sipe_core_public *sipe_public,
 				     const gchar *country,
 				     const gchar *email)
 {
+	SIPE_DEBUG_INFO_NOFORMAT("STUB sipe_backend_search_results_add");
 }
 
 void sipe_backend_search_results_finalize(struct sipe_core_public *sipe_public,
@@ -28,4 +32,5 @@ void sipe_backend_search_results_finalize(struct sipe_core_public *sipe_public,
 					  const gchar *description,
 					  gboolean more)
 {
+	SIPE_DEBUG_INFO_NOFORMAT("STUB sipe_backend_search_results_finalize");
 }

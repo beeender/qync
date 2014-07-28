@@ -3,50 +3,42 @@
 
 #include "sipe-core.h"
 
-#include <QThread>
-#include <QStringList>
 
 QyncSipe::QyncSipe(QObject* parent)
     :QObject(parent), mAccountName(""), mDomainUser(""), mPassword(""),
-    mEmail(""), mEmailUrl(""), mSso(FALSE),
-    mSipePublic(0), mSipeThread(), mLoginManager(this), mStatus(Idle)
+    mEmail(""), mEmailUrl(""), mSso(FALSE), mDb(),
+    mSipePublic(NULL), mSipeThread(), mBackend(this), mStatus(StatusOffline),
+    mBuddyList(NULL), mGroupList(NULL) 
 {
-    sipe_core_init("");
-    mLoginManager.moveToThread(&mSipeThread);
+    mGroupList = mDb.getGroupList();
+    mBuddyList = mDb.getBuddyList();
+
+    mBackend.moveToThread(&mSipeThread);
     mSipeThread.start();
+
+    mBuddyListModel = new QyncBuddyListModel();
 }
 
 QyncSipe::~QyncSipe()
 {
-
+    delete mBuddyListModel;
 }
 
 bool QyncSipe::start()
 {
-    const gchar *errmsg;
+    LoginInfo loginInfo;
+    loginInfo.accountName = mAccountName;
+    loginInfo.domainUser = mDomainUser;
+    loginInfo.password = mPassword;
+    loginInfo.email = mEmail;
+    loginInfo.emailUrl = mEmailUrl;
+    loginInfo.sso = mSso;
 
-    gchar *username = (gchar *)mAccountName.toStdString().c_str();
-    QStringList domainUser = mDomainUser.split("\\", QString::KeepEmptyParts);
-
-    int tmpstatus;
-    int ttype = SIPE_TRANSPORT_AUTO;
-    guint authentication_type = SIPE_AUTHENTICATION_TYPE_NTLM;
-
-    mSipePublic = sipe_core_allocate(
-            mAccountName.toStdString().c_str(),
-            mSso,
-            domainUser.size() == 2 ? domainUser[0].toStdString().c_str() : NULL,
-            domainUser.size() == 2 ?
-                domainUser[1].toStdString().c_str() : domainUser[0].toStdString().c_str(),
-            mPassword.toStdString().c_str(),
-            mEmail.toStdString().c_str(),
-            mEmailUrl.toStdString().c_str(),
-            &errmsg);
-
-    if (!mSipePublic) return false;
-
-    mSipePublic->backend_private = (struct sipe_backend_private *)this;
-    emit mLoginManager.login();
+    mDb.init(mAccountName);
+    foreach(QyncBuddyObject *buddy, *mBuddyList) {
+        mBuddyListModel->addBuddy(*buddy);
+    }
+    emit mBackend.login(loginInfo);
 
     return true;
 }
@@ -55,5 +47,29 @@ void QyncSipe::setStatus(LoginStatusE s)
 {
     mStatus = s;
     emit statusChanged();
+}
+
+bool QyncSipe::addGroup(const QString &group)
+{
+    return mDb.addGroup(group);
+}
+
+QyncBuddyObject *QyncSipe::findBuddy(const QString &buddyName, const QString &groupName)
+{
+    foreach(QyncBuddyObject *buddy, *mBuddyList) {
+        if (buddy->getName().compare(buddyName) == 0 &&
+                buddy->getGroup().compare(groupName) == 0) {
+            return buddy;
+        }
+    }
+
+    return NULL;
+}
+
+QyncBuddyObject *QyncSipe::addBuddy(const QString &buddyName, const QString &alias, const QString &groupName)
+{
+    QyncBuddyObject *buddy = mDb.addBuddy(buddyName, alias, groupName);
+    mBuddyListModel->addBuddy(*buddy);
+    return buddy;
 }
 

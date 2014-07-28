@@ -7,7 +7,7 @@ void sipe_backend_notify_message_error(struct sipe_core_public *sipe_public,
 				       const gchar *who,
 				       const gchar *message)
 {
-    SIPE_DEBUG_INFO_NOFORMAT("sipe_backend_notify_message_error");
+    SIPE_DEBUG_INFO_NOFORMAT("STUB sipe_backend_notify_message_error");
 }
 
 void sipe_backend_notify_message_info(struct sipe_core_public *sipe_public,
@@ -15,13 +15,13 @@ void sipe_backend_notify_message_info(struct sipe_core_public *sipe_public,
 				      const gchar *who,
 				      const gchar *message)
 {
-    SIPE_DEBUG_INFO_NOFORMAT("sipe_backend_notify_message_info");
+    SIPE_DEBUG_INFO_NOFORMAT("STUB sipe_backend_notify_message_info");
 }
 
 void sipe_backend_notify_error(struct sipe_core_public *sipe_public,
 			       const gchar *title,
 			       const gchar *msg)
 {
-    SIPE_DEBUG_INFO_NOFORMAT("sipe_backend_notify_error");
+    SIPE_DEBUG_INFO_NOFORMAT("STUB sipe_backend_notify_error");
 }
 

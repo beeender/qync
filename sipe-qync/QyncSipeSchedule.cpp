@@ -28,6 +28,7 @@ QyncSipeSchedule::QyncSipeSchedule(struct sipe_core_public *sipe_public, guint t
     :QObject(parent), mTimer()
 {
     mData = data;
+    mTimer.setSingleShot(true);
     connect(&mTimer, SIGNAL(timeout()), this, SLOT(schedule()));
     mTimer.start(timeout);
 }

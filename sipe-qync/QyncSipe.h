@@ -3,8 +3,13 @@
 
 #include <QObject>
 #include <QThread>
+#include <QList>
 
-#include "QyncLoginManager.h"
+#include "QyncBackend.h"
+#include "QyncDB.h"
+#include "QyncBuddyObject.h"
+#include "QyncGroupObject.h"
+#include "QyncBuddyListModel.h"
 
 class QyncSipe : public QObject
 {
@@ -19,23 +24,27 @@ class QyncSipe : public QObject
     Q_ENUMS(LoginStatusE)
     Q_PROPERTY(LoginStatusE status READ getStatus NOTIFY statusChanged)
 
-    friend class QyncLoginManager;
+    friend class QyncBackend;
 
     public:
+        enum LoginStatusE {
+            StatusOffline,
+            StatusInProcess,
+            StatusActive,
+            StatusInactive,
+            StatusBusy,
+            StatusAway,
+            StatusDND,
+        };
+
         QyncSipe(QObject* parent = 0);
         ~QyncSipe();
-
-        enum LoginStatusE {
-            Idle,
-            InProcess,
-            LoggedIn,
-        };
 
         Q_INVOKABLE bool start();
 
         struct sipe_core_public *getSipePublic() const { return mSipePublic; };
         LoginStatusE getStatus() { return mStatus; };
-
+        QyncBuddyListModel *getBuddyListModel() const { return mBuddyListModel; };
     private:
         QString mAccountName;
         QString mDomainUser;
@@ -44,14 +53,22 @@ class QyncSipe : public QObject
         QString mEmailUrl;
         bool mSso;
 
+        const QList<QyncBuddyObject *> *mBuddyList;
+        const QList<QyncGroupObject *> *mGroupList;
+        QyncBuddyListModel *mBuddyListModel;
+
         QThread mSipeThread;
-        QyncLoginManager mLoginManager;
+        QyncBackend mBackend;
+        QyncDB mDb;
 
         struct sipe_core_public *mSipePublic;
 
         LoginStatusE mStatus;
 
         void setStatus(LoginStatusE s);
+        bool addGroup(const QString &group);
+        QyncBuddyObject *findBuddy(const QString &buddyName, const QString &groupName);
+        QyncBuddyObject *addBuddy(const QString &buddyName, const QString &alias, const QString &groupName);
 
     private slots:
 
