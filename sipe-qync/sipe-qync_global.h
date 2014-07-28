@@ -1,0 +1,12 @@
+#ifndef SIPEQYNC_GLOBAL_H
+#define SIPEQYNC_GLOBAL_H
+
+#include <QtCore/qglobal.h>
+
+#if defined(SIPEQYNC_LIBRARY)
+#  define SIPEQYNCSHARED_EXPORT Q_DECL_EXPORT
+#else
+#  define SIPEQYNCSHARED_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // SIPEQYNC_GLOBAL_H
