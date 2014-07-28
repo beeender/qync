@@ -1,3 +1,3 @@
 [submodule "siplcs"]
-	path = siplcs
+	path = sipe-qync/siplcs
 	url = git://repo.or.cz/siplcs.git
