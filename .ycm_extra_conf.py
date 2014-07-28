@@ -70,7 +70,7 @@ flags = [
 '-I', 'build/Tests',
 
 '-I', './siplcs/src/api',
-'-I', './sipe-qync',
+'-I', './sipe-qync/inc',
 '-I', './core',
 ]
 
