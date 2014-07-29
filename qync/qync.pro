@@ -7,6 +7,7 @@ CONFIG += link_pkgconfig
 PKGCONFIG += glib-2.0
 PKGCONFIG += openssl
 PKGCONFIG += gobject-2.0
+PKGCONFIG += gmime-2.6
 
 SOURCES += \
     qync.cpp
