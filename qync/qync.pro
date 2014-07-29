@@ -10,11 +10,12 @@ PKGCONFIG += gobject-2.0
 PKGCONFIG += gmime-2.6
 
 SOURCES += \
-    qync.cpp
+    qync.cpp \
+    core/QyncSipeCore.cpp
 
 RESOURCES += qml.qrc
 
-INCLUDEPATH += ../sipe-qync/inc
+INCLUDEPATH += ../sipe-qync/inc core/
 LIBS += ../sipe-qync/libsipe-qync.a
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
@@ -22,3 +23,6 @@ QML_IMPORT_PATH =
 
 # Default rules for deployment.
 include(deployment.pri)
+
+HEADERS += \
+    core/QyncSipeCore.h

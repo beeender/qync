@@ -4,17 +4,17 @@
 #include <QtQml>
 #include <QtQuick/QQuickView>
 
-#include "QyncSipe.h"
+#include "QyncSipeCore.h"
 
 #include "QyncBuddyListModel.h"
 
 int main(int argc, char **argv)
 {
-    qmlRegisterType<QyncSipe>("QyncSipe", 1, 0, "QyncSipe");
+    qmlRegisterType<QyncSipeCore>("QyncSipe", 1, 0, "QyncSipe");
 
     QApplication app (argc, argv);
 
-    QyncSipe *qyncSipe = new QyncSipe();
+    QyncSipeCore *qyncSipe = new QyncSipeCore();
 
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("qyncSipe", qyncSipe);

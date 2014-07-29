@@ -1,78 +1,28 @@
-#include <glib.h>
+#define QYNCSIPE_CPP
+
+#include <QThread>
+
 #include "QyncSipe.h"
-
-#include "sipe-core.h"
-
 #include "QyncBackend.h"
 
-
-QyncSipe::QyncSipe(QObject* parent)
-    :QObject(parent), mAccountName(""), mDomainUser(""), mPassword(""),
-    mEmail(""), mEmailUrl(""), mSso(FALSE), mDb(),
-    mSipePublic(NULL), mSipeThread(), mStatus(StatusOffline),
-    mBuddyList(NULL), mGroupList(NULL)
+QyncSipe::QyncSipe(bool threadedBackend) : mBackendThread(NULL)
 {
-    mGroupList = mDb.getGroupList();
-    mBuddyList = mDb.getBuddyList();
-
+    qRegisterMetaType<QyncSipe::LoginInfo>("QyncSipe::LoginInfo");
     mBackend = new QyncBackend(this);
-    mBackend->moveToThread(&mSipeThread);
-    mSipeThread.start();
-
-    mBuddyListModel = new QyncBuddyListModel();
+    if (threadedBackend) {
+        mBackendThread = new QThread();
+        mBackend->moveToThread(mBackendThread);
+        mBackendThread->start();
+    }
 }
 
 QyncSipe::~QyncSipe()
 {
     delete mBackend;
-    delete mBuddyListModel;
+    if(mBackendThread) delete mBackendThread;
 }
 
-bool QyncSipe::start()
+void QyncSipe::login(const LoginInfo &loginInfo)
 {
-    LoginInfo loginInfo;
-    loginInfo.accountName = mAccountName;
-    loginInfo.domainUser = mDomainUser;
-    loginInfo.password = mPassword;
-    loginInfo.email = mEmail;
-    loginInfo.emailUrl = mEmailUrl;
-    loginInfo.sso = mSso;
-
-    mDb.init(mAccountName);
-    foreach(QyncBuddyObject *buddy, *mBuddyList) {
-        mBuddyListModel->addBuddy(*buddy);
-    }
-    emit mBackend->login(loginInfo);
-
-    return true;
-}
-
-void QyncSipe::setStatus(LoginStatusE s)
-{
-    mStatus = s;
-    emit statusChanged();
-}
-
-bool QyncSipe::addGroup(const QString &group)
-{
-    return mDb.addGroup(group);
-}
-
-QyncBuddyObject *QyncSipe::findBuddy(const QString &buddyName, const QString &groupName)
-{
-    foreach(QyncBuddyObject *buddy, *mBuddyList) {
-        if (buddy->getName().compare(buddyName) == 0 &&
-                buddy->getGroup().compare(groupName) == 0) {
-            return buddy;
-        }
-    }
-
-    return NULL;
-}
-
-QyncBuddyObject *QyncSipe::addBuddy(const QString &buddyName, const QString &alias, const QString &groupName)
-{
-    QyncBuddyObject *buddy = mDb.addBuddy(buddyName, alias, groupName);
-    mBuddyListModel->addBuddy(*buddy);
-    return buddy;
+    emit mBackend->__login(loginInfo);
 }

@@ -4,7 +4,6 @@
 
 #include "sipe-core.h"
 
-#include "QyncSipe.h"
 #include "QyncSipeUtils.h"
 #include "QyncBackend.h"
 
@@ -12,8 +11,7 @@ QyncBackend::QyncBackend(QyncSipe *qyncSipe, QObject *parent)
     :mQyncSipe(qyncSipe), QObject(parent), mDesiredStatus(SIPE_ACTIVITY_UNSET)
     ,mSipePublic(0)
 {
-    qRegisterMetaType<LoginInfo>("LoginInfo");
-    connect(this, SIGNAL(login(const LoginInfo &)), this, SLOT(doLogin(const LoginInfo &)));
+    connect(this, SIGNAL(__login(const QyncSipe::LoginInfo &)), this, SLOT(doLogin(const QyncSipe::LoginInfo &)));
     sipe_core_init("");
 }
 
@@ -21,7 +19,7 @@ QyncBackend::~QyncBackend()
 {
 }
 
-void QyncBackend::doLogin(const LoginInfo &loginInfo)
+void QyncBackend::doLogin(const QyncSipe::LoginInfo &loginInfo)
 {
     const gchar *errmsg;
 

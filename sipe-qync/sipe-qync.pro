@@ -84,7 +84,6 @@ SOURCES += \
     src/QyncBuddyObject.cpp \
     src/QyncDB.cpp \
     src/QyncGroupObject.cpp \
-    src/QyncSipe.cpp \
     src/QyncSipeBuddy.cpp \
     src/QyncSipeChat.cpp \
     src/QyncSipeConnection.cpp \
@@ -103,7 +102,8 @@ SOURCES += \
     src/QyncSipeStatus.cpp \
     src/QyncSipeTransport.cpp \
     src/QyncSipeUser.cpp \
-    src/QyncSipeUtils.cpp
+    src/QyncSipeUtils.cpp \
+    src/QyncSipe.cpp
 
 INCLUDEPATH += inc/ siplcs/src/api/
 

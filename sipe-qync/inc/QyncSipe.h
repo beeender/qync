@@ -2,29 +2,16 @@
 #define QYNCSIPE_H
 
 #include <QObject>
-#include <QThread>
-#include <QList>
-
-#include "QyncBuddyObject.h"
-#include "QyncGroupObject.h"
-#include "QyncBuddyListModel.h"
-
-#include "QyncDB.h"
+#include <QString>
+#include <QMetaType>
 
 class QyncBackend;
+class QThread;
+class QyncBuddyObject;
 class QyncSipe : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString accountName MEMBER mAccountName)
-    Q_PROPERTY(QString domainUser MEMBER mDomainUser)
-    Q_PROPERTY(QString password MEMBER mPassword)
-    Q_PROPERTY(QString email MEMBER mEmail)
-    Q_PROPERTY(QString emailUrl MEMBER mEmailUrl)
-    Q_PROPERTY(bool sso MEMBER mSso)
-
     Q_ENUMS(LoginStatusE)
-    Q_PROPERTY(LoginStatusE status READ getStatus NOTIFY statusChanged)
-
 
     public:
         enum LoginStatusE {
@@ -37,45 +24,33 @@ class QyncSipe : public QObject
             StatusDND,
         };
 
-        QyncSipe(QObject* parent = 0);
-        ~QyncSipe();
+        struct LoginInfo {
+            QString accountName;
+            QString domainUser;
+            QString password;
+            QString email;
+            QString emailUrl;
+            bool sso;
+        };
 
-        Q_INVOKABLE bool start();
+    public:
+        QyncSipe(bool threadedBackend = true);
+        virtual ~QyncSipe();
 
-        struct sipe_core_public *getSipePublic() const { return mSipePublic; };
-        LoginStatusE getStatus() { return mStatus; };
-        QyncBuddyListModel *getBuddyListModel() const { return mBuddyListModel; };
+        //Callback functions called by the backend
+        virtual void setStatus(const LoginStatusE s) = 0;
+        virtual QyncBuddyObject *addBuddy(const QString &buddyName, const QString &alias, const QString &groupName) = 0;
+        virtual QyncBuddyObject *findBuddy(const QString &buddyName, const QString &groupName) = 0;
+        virtual bool addGroup(const QString &group) = 0;
 
-        void setStatus(LoginStatusE s);
-        bool addGroup(const QString &group);
-        QyncBuddyObject *findBuddy(const QString &buddyName, const QString &groupName);
-        QyncBuddyObject *addBuddy(const QString &buddyName, const QString &alias, const QString &groupName);
+        //Interfaces for the frontend
+        void login(const LoginInfo &loginInfo);
     private:
-        QString mAccountName;
-        QString mDomainUser;
-        QString mPassword;
-        QString mEmail;
-        QString mEmailUrl;
-        bool mSso;
-
-        const QList<QyncBuddyObject *> *mBuddyList;
-        const QList<QyncGroupObject *> *mGroupList;
-        QyncBuddyListModel *mBuddyListModel;
-
-        QThread mSipeThread;
         QyncBackend *mBackend;
-        QyncDB mDb;
-
-        struct sipe_core_public *mSipePublic;
-
-        LoginStatusE mStatus;
-
-
-    private slots:
-
-    signals:
-        void statusChanged();
+        QThread *mBackendThread;
 };
+
+Q_DECLARE_METATYPE(QyncSipe::LoginInfo);
 
 #endif
 
