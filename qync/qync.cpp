@@ -27,7 +27,7 @@ int main(int argc, char **argv)
     listModel.addBuddy(o2);
     engine.rootContext()->setContextProperty("buddyListModel", &listModel);
 #endif
-    engine.load(QUrl::fromLocalFile("ui/QyncApp.qml"));
+    engine.load(QUrl(QStringLiteral("qrc:///QyncApp.qml")));
 
     return app.exec();
 }

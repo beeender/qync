@@ -13,7 +13,8 @@ SOURCES += \
     qync.cpp \
     core/QyncSipeCore.cpp
 
-RESOURCES += qml.qrc
+RESOURCES += \
+    qml/qml.qrc
 
 INCLUDEPATH += ../sipe-qync/inc core/
 LIBS += ../sipe-qync/libsipe-qync.a
