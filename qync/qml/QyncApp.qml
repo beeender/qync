@@ -19,9 +19,7 @@ ApplicationWindow {
         }
     }
 
-    Login {
-        id: login1
+    Main {
         anchors.fill: parent
     }
-
 }

@@ -2,7 +2,7 @@
 #define QYNCBUDDYOBJECT_H
 
 #include <QObject>
-
+#include <QSharedPointer>
 
 class QyncBuddyObject: public QObject
 {
@@ -12,24 +12,22 @@ class QyncBuddyObject: public QObject
     Q_PROPERTY(QString group READ getGroup NOTIFY onChanged)
     Q_PROPERTY(QString alias READ getAlias)
 
-    friend class QyncDB;
-
     public:
         QyncBuddyObject(const QString &name);
 
         const QString &getName() const { return mName; };
         const QString &getGroup() const { return mGroup; };
         const QString &getAlias() const { return mAlias; };
-        const quint32 &getGroupId() const { return mGroupId; };
-    private:
+        qint32 getGroupId() const { return mGroupId; };
         void setAlias(const QString &name);
         void setGroup(const QString &group);
-        void setGroupId(const quint32 groupId);
+        void setGroupId(const qint32 groupId);
 
+    private:
         QString mAlias;
         QString mName;
         QString mGroup;
-        quint32 mGroupId;
+        qint32 mGroupId;
 
     signals:
         void onChanged();

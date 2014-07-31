@@ -11,20 +11,16 @@ class QyncGroupObject: public QObject
     Q_PROPERTY(QString name READ getName NOTIFY onChanged)
     Q_PROPERTY(quint32 id READ getId NOTIFY onChanged)
 
-    friend class QyncDB;
-
     public:
         QyncGroupObject(quint32 id) { mId = id; } ;
 
-        QString getName() { return mName; };
-        quint32 getId() { return mId; };
-
-    protected:
+        const QString &getName() { return mName; };
+        qint32 getId() { return mId; };
         void setName(const QString name) { mName = name; };
 
     private:
         QString mName;
-        quint32 mId;
+        qint32 mId;
 
     signals:
         void onChanged();

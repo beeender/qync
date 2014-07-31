@@ -2,6 +2,7 @@
 #define QYNCSIPECORE_H
 
 #include <QList>
+#include <QSharedPointer>
 
 #include "QyncSipe.h"
 
@@ -42,8 +43,6 @@ class QyncSipeCore : public QyncSipe
         QString mEmailUrl;
         bool mSso;
 
-        const QList<QyncBuddyObject *> *mBuddyList;
-        const QList<QyncGroupObject *> *mGroupList;
         QyncBuddyListModel *mBuddyListModel;
 
         QyncDB mDb;
@@ -53,7 +52,7 @@ class QyncSipeCore : public QyncSipe
         void setStatus(const QyncSipe::LoginStatusE s);
         QyncBuddyObject *addBuddy(const QString &buddyName, const QString &alias, const QString &groupName);
         QyncBuddyObject *findBuddy(const QString &buddyName, const QString &groupName);
-        bool addGroup(const QString &group);
+        bool addGroup(const QString &groupName);
     private slots:
 
     signals:

@@ -18,7 +18,7 @@ void QyncBuddyObject::setGroup(const QString &group)
     mGroup = group;
 }
 
-void QyncBuddyObject::setGroupId(quint32 groupId)
+void QyncBuddyObject::setGroupId(qint32 groupId)
 {
     mGroupId = groupId;
 }

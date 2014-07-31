@@ -1,14 +1,10 @@
 #include "QyncSipeCore.h"
 
-QyncSipeCore::QyncSipeCore(QObject* parent, bool threadedBackend)
+QyncSipeCore::QyncSipeCore(QObject* /*parent*/, bool threadedBackend)
     :QyncSipe(threadedBackend),
     mAccountName(""), mDomainUser(""), mPassword(""),
-    mEmail(""), mEmailUrl(""), mSso(false), mDb(), mStatus(StatusOffline),
-    mBuddyList(NULL), mGroupList(NULL)
+    mEmail(""), mEmailUrl(""), mSso(false), mDb(), mStatus(StatusOffline)
 {
-    mGroupList = mDb.getGroupList();
-    mBuddyList = mDb.getBuddyList();
-
     mBuddyListModel = new QyncBuddyListModel();
 }
 
@@ -28,11 +24,17 @@ bool QyncSipeCore::start()
     loginInfo.sso = mSso;
 
     mDb.init(mAccountName);
-    foreach(QyncBuddyObject *buddy, *mBuddyList) {
-        mBuddyListModel->addBuddy(*buddy);
+    foreach(QSharedPointer<QyncGroupObject> group, mDb.getGroupList()) {
+        mBuddyListModel->addGroup(group);
+    }
+    foreach(QSharedPointer<QyncBuddyObject> buddy, mDb.getBuddyList()) {
+        mBuddyListModel->addBuddy(buddy);
     }
 
     login(loginInfo);
+    //FIXME:For testing.
+    //setStatus(StatusInProcess);
+    //setStatus(StatusActive);
     return true;
 }
 
@@ -42,17 +44,21 @@ void QyncSipeCore::setStatus(LoginStatusE s)
     emit statusChanged();
 }
 
-bool QyncSipeCore::addGroup(const QString &group)
+bool QyncSipeCore::addGroup(const QString &groupName)
 {
-    return mDb.addGroup(group);
+    const QSharedPointer<QyncGroupObject> group = mDb.addGroup(groupName);
+    if (group.isNull()) return false;
+
+    mBuddyListModel->addGroup(group);
+    return true;
 }
 
 QyncBuddyObject *QyncSipeCore::findBuddy(const QString &buddyName, const QString &groupName)
 {
-    foreach(QyncBuddyObject *buddy, *mBuddyList) {
+    foreach(QSharedPointer<QyncBuddyObject> buddy, mDb.getBuddyList()) {
         if (buddy->getName().compare(buddyName) == 0 &&
                 buddy->getGroup().compare(groupName) == 0) {
-            return buddy;
+            return buddy.data();
         }
     }
 
@@ -61,7 +67,7 @@ QyncBuddyObject *QyncSipeCore::findBuddy(const QString &buddyName, const QString
 
 QyncBuddyObject *QyncSipeCore::addBuddy(const QString &buddyName, const QString &alias, const QString &groupName)
 {
-    QyncBuddyObject *buddy = mDb.addBuddy(buddyName, alias, groupName);
-    mBuddyListModel->addBuddy(*buddy);
-    return buddy;
+    QSharedPointer<QyncBuddyObject> buddy = mDb.addBuddy(buddyName, alias, groupName);
+    mBuddyListModel->addBuddy(buddy);
+    return buddy.data();
 }

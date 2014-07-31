@@ -28,7 +28,7 @@ const static char *INSERT_BUDDY=
 const static char *SELECT_ALL_GROUPS =
     "SELECT id, name FROM buddygroup";
 const static char *SELECT_ALL_BUDDIES=
-    "SELECT buddy.id, buddy.name, buddy.alias, buddy.groupid, buddygroup.name FROM buddy, buddygroup";
+    "SELECT buddy.id, buddy.name, buddy.alias, buddy.groupid, buddygroup.name FROM buddy, buddygroup where buddy.groupid = buddygroup.id";
 
 QyncDB::QyncDB() :
     mBuddyList(), mGroupList()
@@ -37,14 +37,12 @@ QyncDB::QyncDB() :
 
 QyncDB::~QyncDB()
 {
-    while (!mGroupList.isEmpty())
-        delete mGroupList.takeFirst();
-    while (!mBuddyList.isEmpty())
-        delete mBuddyList.takeFirst();
+    mGroupList.clear();
+    mBuddyList.clear();
     mDb.close();
 }
 
-void QyncDB::init(QString account)
+void QyncDB::init(const QString & /*account*/)
 {
     mDb = QSqlDatabase::addDatabase("QSQLITE");
     mDb.setDatabaseName("database.db");
@@ -65,36 +63,32 @@ void QyncDB::init(QString account)
     loadBuddies();
 }
 
-bool QyncDB::addGroup(QString groupName)
+const QSharedPointer<QyncGroupObject> QyncDB::addGroup(const QString &groupName)
 {
-    foreach(QyncGroupObject *group, mGroupList)
-    {
-        if (group->getName().compare(groupName) == 0) return true;
+    foreach(QSharedPointer<QyncGroupObject> group, mGroupList) {
+        if (group->getName().compare(groupName) == 0) return group;
     }
 
-    bool r;
     QSqlQuery query;
-    r = query.exec(QString(INSERT_GROUP).arg(groupName));
-    if (r) {
+
+    if (query.exec(QString(INSERT_GROUP).arg(groupName))) {
         qint32 id = query.lastInsertId().toInt();
         QyncGroupObject *obj = new QyncGroupObject(id);
         obj->setName(groupName);
-        mGroupList.append(obj);
+        mGroupList.append(QSharedPointer<QyncGroupObject>(obj));
     } else {
         qFatal("QyncDB: %s", SQL_ERROR_STR(query.lastError()));
     }
 
-    return true;
+    return mGroupList.last();
 }
 
 void QyncDB::loadGroups()
 {
-    while (!mGroupList.isEmpty())
-        delete mGroupList.takeFirst();
+    mGroupList.clear();
 
     QSqlQuery query;
-    bool r = query.exec(QString(SELECT_ALL_GROUPS));
-    if (!r) {
+    if (!query.exec(QString(SELECT_ALL_GROUPS))) {
         qFatal("QyncDB: %s", SQL_ERROR_STR(query.lastError()));
     }
 
@@ -103,18 +97,16 @@ void QyncDB::loadGroups()
         QString name = query.value(1).toString();
         QyncGroupObject *obj = new QyncGroupObject(id);
         obj->setName(name);
-        mGroupList.append(obj);
+        mGroupList.append(QSharedPointer<QyncGroupObject>(obj));
     }
 }
 
 void QyncDB::loadBuddies()
 {
-    while (!mBuddyList.isEmpty())
-        delete mBuddyList.takeFirst();
+    mBuddyList.clear();
 
     QSqlQuery query;
-    bool r = query.exec(QString(SELECT_ALL_BUDDIES));
-    if (!r) {
+    if (!query.exec(QString(SELECT_ALL_BUDDIES))) {
         qFatal("QyncDB: %s", SQL_ERROR_STR(query.lastError()));
         return;
     }
@@ -130,14 +122,14 @@ void QyncDB::loadBuddies()
         obj->setGroupId(groupId);
         obj->setAlias(alias);
         obj->setGroup(groupName);
-        mBuddyList.append(obj);
+        mBuddyList.append(QSharedPointer<QyncBuddyObject>(obj));
     }
 }
 
-QyncBuddyObject *QyncDB::addBuddy(const QString &name, const QString &alias, const QString &groupName)
+const QSharedPointer<QyncBuddyObject> QyncDB::addBuddy(const QString &name, const QString &alias, const QString &groupName)
 {
     qint32 groupId = -1;
-    foreach(QyncGroupObject* group, mGroupList) {
+    foreach(QSharedPointer<QyncGroupObject> group, mGroupList) {
         if (group->getName().compare(groupName) == 0) {
             groupId = group->getId();
             break;
@@ -147,7 +139,7 @@ QyncBuddyObject *QyncDB::addBuddy(const QString &name, const QString &alias, con
         qFatal("Cannot find group: %s", groupName.toStdString().c_str());
     }
 
-    foreach(QyncBuddyObject *buddy, mBuddyList) {
+    foreach(QSharedPointer<QyncBuddyObject> buddy, mBuddyList) {
         if (buddy->getName().compare(name) && buddy->getGroupId() == groupId) {
             return buddy;
         }
@@ -155,17 +147,17 @@ QyncBuddyObject *QyncDB::addBuddy(const QString &name, const QString &alias, con
 
     QSqlQuery query;
     QyncBuddyObject *obj = NULL;
-    bool r = query.exec(QString(INSERT_BUDDY).arg(name, alias).arg(groupId));
-    if (r) {
+    if (query.exec(QString(INSERT_BUDDY).arg(name, alias).arg(groupId))) {
         qint32 id = query.lastInsertId().toInt();
         obj = new QyncBuddyObject(name);
         obj->setAlias(alias);
         obj->setGroup(groupName);
         obj->setGroupId(groupId);
-        mBuddyList.append(obj);
+        mBuddyList.append(QSharedPointer<QyncBuddyObject>(obj));
     } else {
         qFatal("QyncDB: %s", SQL_ERROR_STR(query.lastError()));
     }
 
-    return obj;
+    return mBuddyList.last();
 }
+

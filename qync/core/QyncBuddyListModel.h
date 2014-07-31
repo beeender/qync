@@ -3,8 +3,10 @@
 
 #include <QList>
 #include <QAbstractListModel>
+#include <QSharedPointer>
 
 #include "QyncBuddyObject.h"
+#include "QyncGroupObject.h"
 
 class QyncBuddyListModel: public QAbstractListModel
 {
@@ -12,20 +14,56 @@ class QyncBuddyListModel: public QAbstractListModel
 
 public:
     enum BuddyRoles {
-        NameRole = Qt::UserRole + 1,
-        GroupRole,
-        AliasRole
+        AliasRole = Qt::UserRole + 1,
+        IsGroupRole,
+        GroupNameRole
     };
 
     QyncBuddyListModel(QObject *parent = 0);
-    QyncBuddyListModel(QList<QyncBuddyObject *> buddyList, QObject *parent = 0);
+    QyncBuddyListModel(const QList<QyncBuddyObject *> buddyList, QObject *parent = 0);
+    virtual ~QyncBuddyListModel();
+
     virtual QHash<int, QByteArray> roleNames() const;
     virtual int rowCount(const QModelIndex & parent = QModelIndex()) const;
     QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
-    void addBuddy(QyncBuddyObject &buddy);
+    void addBuddy(const QSharedPointer<QyncBuddyObject> &buddy);
+    void addGroup(const QSharedPointer<QyncGroupObject> &group);
 
 private:
-    QList<QyncBuddyObject *> mBuddyList;
+    struct BuddyOrGroup{
+        QSharedPointer<QyncBuddyObject> mBuddy;
+        QSharedPointer<QyncGroupObject> mGroup;
+
+        BuddyOrGroup(const QSharedPointer<QyncBuddyObject> &buddy) : mGroup(0) {
+            mBuddy = buddy;
+        };
+
+        BuddyOrGroup(const QSharedPointer<QyncGroupObject> &group) : mBuddy(0) {
+            mGroup = group;
+        };
+
+        bool isGroup() {
+            if (mBuddy.isNull()) return true;
+            return false;
+        }
+
+        const QString getName() {
+            if (mBuddy.isNull()) return "";
+            return mBuddy->getName();
+        };
+
+        const QString getAlias() {
+            if (mBuddy.isNull()) return "";
+            return mBuddy->getAlias();
+        };
+
+        const QString getGroupName() {
+            if (mGroup.isNull()) return "";
+            return mGroup->getName();
+        }
+    };
+
+    QList<BuddyOrGroup *> mBuddyOrGroupList;
 };
 
 #endif

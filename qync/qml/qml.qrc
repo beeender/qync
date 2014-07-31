@@ -2,5 +2,11 @@
     <qresource prefix="/">
         <file>QyncApp.qml</file>
         <file>Login.qml</file>
+        <file>Main.qml</file>
+        <file>BuddyListView.qml</file>
+        <file>LoginView.qml</file>
+        <file>LoginWaitingView.qml</file>
+        <file>BuddyWidget.qml</file>
+        <file>BuddyListItem.qml</file>
     </qresource>
 </RCC>
