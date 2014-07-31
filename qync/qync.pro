@@ -11,7 +11,9 @@ PKGCONFIG += gmime-2.6
 
 SOURCES += \
     qync.cpp \
-    core/QyncSipeCore.cpp
+    core/QyncSipeCore.cpp \
+    core/QyncDB.cpp \
+    core/QyncBuddyListModel.cpp
 
 RESOURCES += \
     qml/qml.qrc
@@ -26,4 +28,6 @@ QML_IMPORT_PATH =
 include(deployment.pri)
 
 HEADERS += \
-    core/QyncSipeCore.h
+    core/QyncSipeCore.h \
+    core/QyncDB.h \
+    core/QyncBuddyListModel.h

@@ -17,14 +17,14 @@ class QyncBuddyObject: public QObject
     public:
         QyncBuddyObject(const QString &name);
 
-        QString getName() const { return mName; };
-        QString getGroup() const { return mGroup; };
-        QString getAlias() const { return mAlias; };
-        quint32 getGroupId() const { return mGroupId; };
+        const QString &getName() const { return mName; };
+        const QString &getGroup() const { return mGroup; };
+        const QString &getAlias() const { return mAlias; };
+        const quint32 &getGroupId() const { return mGroupId; };
     private:
         void setAlias(const QString &name);
         void setGroup(const QString &group);
-        void setGroupId(quint32 groupId);
+        void setGroupId(const quint32 groupId);
 
         QString mAlias;
         QString mName;

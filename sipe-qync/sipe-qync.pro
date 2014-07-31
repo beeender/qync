@@ -80,9 +80,7 @@ SOURCES += \
     siplcs/src/core/sipmsg.c \
     siplcs/src/core/uuid.c \
     src/QyncBackend.cpp \
-    src/QyncBuddyListModel.cpp \
     src/QyncBuddyObject.cpp \
-    src/QyncDB.cpp \
     src/QyncGroupObject.cpp \
     src/QyncSipeBuddy.cpp \
     src/QyncSipeChat.cpp \
@@ -110,9 +108,7 @@ INCLUDEPATH += inc/ siplcs/src/api/
 HEADERS +=\
     sipe-qync_global.h \
     inc/QyncBackend.h \
-    inc/QyncBuddyListModel.h \
     inc/QyncBuddyObject.h \
-    inc/QyncDB.h \
     inc/QyncGroupObject.h \
     inc/QyncSipe.h \
     src/QyncSipeUtils.h \
