@@ -140,7 +140,7 @@ const QSharedPointer<QyncBuddyObject> QyncDB::addBuddy(const QString &name, cons
     }
 
     foreach(QSharedPointer<QyncBuddyObject> buddy, mBuddyList) {
-        if (buddy->getName().compare(name) && buddy->getGroupId() == groupId) {
+        if (buddy->getName().compare(name) == 0 && buddy->getGroupId() == groupId) {
             return buddy;
         }
     }
