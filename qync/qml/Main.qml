@@ -14,6 +14,7 @@ Rectangle {
 
     LoginWaitingView {
         id: loginWaitingView
+        anchors.verticalCenter: parent.verticalCenter
         visible: false
     }
 

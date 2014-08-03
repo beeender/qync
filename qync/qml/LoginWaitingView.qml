@@ -2,8 +2,7 @@ import QtQuick 2.0
 import QtQuick.Controls 1.1
 
 Column {
-    y: 120
-    height: 118
+    id: column1
     anchors.right: parent.right
     anchors.rightMargin: 30
     anchors.left: parent.left
@@ -11,10 +10,7 @@ Column {
 
     ProgressBar {
         id: progressBar
-        anchors.right: parent.right
-        anchors.rightMargin: 0
-        anchors.left: parent.left
-        anchors.leftMargin: 0
+        anchors.horizontalCenter: parent.horizontalCenter
         indeterminate: true
         activeFocusOnTab: false
     }
@@ -30,8 +26,6 @@ Column {
     Button {
         id: cancelButton
         text: qsTr("Cancel")
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 0
         anchors.horizontalCenter: parent.horizontalCenter
     }
 }
