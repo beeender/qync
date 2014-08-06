@@ -5,12 +5,12 @@ QyncSipeCore::QyncSipeCore(QObject* /*parent*/, bool threadedBackend)
     mAccountName(""), mDomainUser(""), mPassword(""),
     mEmail(""), mEmailUrl(""), mSso(false), mDb(), mStatus(StatusOffline)
 {
-    mBuddyListModel = new QyncBuddyListModel();
+    mGroupListModel = new QyncCategoryListModel();
 }
 
 QyncSipeCore::~QyncSipeCore()
 {
-    delete mBuddyListModel;
+    delete mGroupListModel;
 }
 
 bool QyncSipeCore::start()
@@ -25,16 +25,16 @@ bool QyncSipeCore::start()
 
     mDb.init(mAccountName);
     foreach(QSharedPointer<QyncGroupObject> group, mDb.getGroupList()) {
-        mBuddyListModel->addGroup(group);
+        mGroupListModel->addGroup(group);
     }
     foreach(QSharedPointer<QyncBuddyObject> buddy, mDb.getBuddyList()) {
-        mBuddyListModel->addBuddy(buddy);
+        mGroupListModel->addBuddy(buddy);
     }
 
-    login(loginInfo);
+    //login(loginInfo);
     //FIXME:For testing.
-    //setStatus(StatusInProcess);
-    //setStatus(StatusActive);
+    setStatus(StatusInProcess);
+    setStatus(StatusActive);
     return true;
 }
 
@@ -49,7 +49,7 @@ bool QyncSipeCore::addGroup(const QString &groupName)
     const QSharedPointer<QyncGroupObject> group = mDb.addGroup(groupName);
     if (group.isNull()) return false;
 
-    mBuddyListModel->addGroup(group);
+    mGroupListModel->addGroup(group);
     return true;
 }
 
@@ -68,6 +68,6 @@ QyncBuddyObject *QyncSipeCore::findBuddy(const QString &buddyName, const QString
 QyncBuddyObject *QyncSipeCore::addBuddy(const QString &buddyName, const QString &alias, const QString &groupName)
 {
     QSharedPointer<QyncBuddyObject> buddy = mDb.addBuddy(buddyName, alias, groupName);
-    mBuddyListModel->addBuddy(buddy);
+    mGroupListModel->addBuddy(buddy);
     return buddy.data();
 }

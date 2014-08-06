@@ -8,7 +8,7 @@
 
 #include "QyncBuddyObject.h"
 #include "QyncGroupObject.h"
-#include "QyncBuddyListModel.h"
+#include "QyncCategoryListModel.h"
 #include "QyncDB.h"
 
 class QyncBackend;
@@ -33,7 +33,7 @@ class QyncSipeCore : public QyncSipe
         Q_INVOKABLE bool start();
 
         QyncSipe::LoginStatusE getStatus() { return mStatus; };
-        QyncBuddyListModel *getBuddyListModel() const { return mBuddyListModel; };
+        QyncCategoryListModel *getGroupListModel() const { return mGroupListModel; };
 
     private:
         QString mAccountName;
@@ -43,7 +43,7 @@ class QyncSipeCore : public QyncSipe
         QString mEmailUrl;
         bool mSso;
 
-        QyncBuddyListModel *mBuddyListModel;
+        QyncCategoryListModel *mGroupListModel;
 
         QyncDB mDb;
 

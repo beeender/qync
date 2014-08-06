@@ -6,13 +6,38 @@ ScrollView {
     anchors.fill: parent
 
     ListView {
-        transformOrigin: Item.Center
-        model: buddyListModel
+        anchors.fill: parent
+        model: groupListModel
 
-        delegate: BuddyListItem {
-            nameStr: aliasName
-            isGroupItem: isGroup
-            groupNameStr: groupName
+        Component {
+            id: catergoryDelegate
+
+            Column {
+                Text {
+                    id: catergoryText
+                    text: groupName
+                }
+                ListView {
+                    height: 30*count
+                    width: 320
+                    model: buddyListModel
+                    interactive: false
+                    delegate:  Column {
+                        Text {
+                            id: aliasText
+                            text: aliasName
+                        }
+                    }
+                }
+            }
+        }
+
+        delegate: Column {
+            Loader {
+                property string groupName: name
+                property var buddyListModel: groupListModel.getBuddyListModel(index)
+                sourceComponent: catergoryDelegate
+            }
         }
     }
 }

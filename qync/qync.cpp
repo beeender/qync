@@ -18,7 +18,7 @@ int main(int argc, char **argv)
 
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("qyncSipe", qyncSipe);
-    engine.rootContext()->setContextProperty("buddyListModel", qyncSipe->getBuddyListModel());
+    engine.rootContext()->setContextProperty("groupListModel", qyncSipe->getGroupListModel());
 #if 0
     QyncBuddyListModel listModel;
     QyncBuddyObject o1("test1");

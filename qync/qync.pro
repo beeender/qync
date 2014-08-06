@@ -4,6 +4,7 @@ QT += qml quick widgets sql
 
 #TODO:Remove this.
 CONFIG += link_pkgconfig
+CONFIG += c++11
 PKGCONFIG += glib-2.0
 PKGCONFIG += openssl
 PKGCONFIG += gobject-2.0
@@ -13,7 +14,8 @@ SOURCES += \
     qync.cpp \
     core/QyncSipeCore.cpp \
     core/QyncDB.cpp \
-    core/QyncBuddyListModel.cpp
+    core/QyncBuddyListModel.cpp \
+    core/QyncCategoryListModel.cpp
 
 RESOURCES += \
     qml/qml.qrc
@@ -30,4 +32,5 @@ include(deployment.pri)
 HEADERS += \
     core/QyncSipeCore.h \
     core/QyncDB.h \
-    core/QyncBuddyListModel.h
+    core/QyncBuddyListModel.h \
+    core/QyncCategoryListModel.h
