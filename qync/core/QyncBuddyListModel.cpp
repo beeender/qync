@@ -6,10 +6,6 @@ QyncBuddyListModel::QyncBuddyListModel(QObject * /*parent*/)
 {
 }
 
-QyncBuddyListModel::QyncBuddyListModel(const QList<QyncBuddyObject *> /*buddyList*/, QObject * /*parent*/)
-{
-}
-
 QyncBuddyListModel::~QyncBuddyListModel()
 {
     mBuddyList.clear();
@@ -38,7 +34,7 @@ QVariant QyncBuddyListModel::data(const QModelIndex & index, int role) const
     return QVariant();
 }
 
-void QyncBuddyListModel::addBuddy(const QSharedPointer<QyncBuddyObject> &buddy)
+void QyncBuddyListModel::addBuddy(const QSharedPointer<QyncBuddy> &buddy)
 {
     int index;
 
@@ -61,3 +57,12 @@ void QyncBuddyListModel::addBuddy(const QSharedPointer<QyncBuddyObject> &buddy)
     endInsertRows();
 }
 
+QSharedPointer<QyncBuddy> QyncBuddyListModel::findBuddy(const QString &name) const
+{
+    foreach(auto it, mBuddyList) {
+        if (it->getName().compare(name) == 0) {
+            return it;
+        }
+    }
+    return QSharedPointer<QyncBuddy>();
+}

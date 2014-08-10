@@ -14,7 +14,7 @@ sipe_backend_buddy sipe_backend_buddy_find(struct sipe_core_public *sipe_public,
 	SIPE_DEBUG_INFO("%s", __func__);
 
     QyncBackend *backend = (QyncBackend *)sipe_public->backend_private;
-    return backend->findBuddy(buddy_name, group_name);
+    return (sipe_backend_buddy)backend->findBuddy(buddy_name, group_name);
 }
 
 GSList* sipe_backend_buddy_find_all(struct sipe_core_public *sipe_public,
@@ -124,7 +124,7 @@ sipe_backend_buddy sipe_backend_buddy_add(struct sipe_core_public *sipe_public,
 
     QyncBackend *backend = (QyncBackend *)sipe_public->backend_private;
 
-    return backend->addBuddy(name, alias, groupname);
+    return (sipe_backend_buddy)backend->addBuddy(name, alias, groupname);
 }
 
 void sipe_backend_buddy_remove(struct sipe_core_public *sipe_public,

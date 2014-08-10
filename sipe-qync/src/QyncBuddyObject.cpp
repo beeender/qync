@@ -2,23 +2,11 @@
 
 #include "QyncBuddyObject.h"
 
-QyncBuddyObject::QyncBuddyObject(const QString &name) :
-    mAlias(),mGroup()
+QyncBuddyObject::QyncBuddyObject()
 {
-    mName = name;
 }
 
-void QyncBuddyObject::setAlias(const QString &alias)
+QyncBuddyObject::~QyncBuddyObject()
 {
-    mAlias = alias;
 }
 
-void QyncBuddyObject::setGroup(const QString &group)
-{
-    mGroup = group;
-}
-
-void QyncBuddyObject::setGroupId(qint32 groupId)
-{
-    mGroupId = groupId;
-}

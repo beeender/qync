@@ -9,13 +9,16 @@ PKGCONFIG += glib-2.0
 PKGCONFIG += openssl
 PKGCONFIG += gobject-2.0
 PKGCONFIG += gmime-2.6
+PKGCONFIG += libxml-2.0
 
 SOURCES += \
     qync.cpp \
     core/QyncSipeCore.cpp \
     core/QyncDB.cpp \
     core/QyncBuddyListModel.cpp \
-    core/QyncCategoryListModel.cpp
+    core/QyncCategoryListModel.cpp \
+    core/QyncBuddy.cpp \
+    core/QyncGroup.cpp
 
 RESOURCES += \
     qml/qml.qrc
@@ -33,4 +36,6 @@ HEADERS += \
     core/QyncSipeCore.h \
     core/QyncDB.h \
     core/QyncBuddyListModel.h \
-    core/QyncCategoryListModel.h
+    core/QyncCategoryListModel.h \
+    core/QyncBuddy.h \
+    core/QyncGroup.h

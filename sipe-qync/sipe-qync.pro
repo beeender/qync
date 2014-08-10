@@ -81,7 +81,6 @@ SOURCES += \
     siplcs/src/core/uuid.c \
     src/QyncBackend.cpp \
     src/QyncBuddyObject.cpp \
-    src/QyncGroupObject.cpp \
     src/QyncSipeBuddy.cpp \
     src/QyncSipeChat.cpp \
     src/QyncSipeConnection.cpp \
@@ -109,7 +108,6 @@ HEADERS +=\
     sipe-qync_global.h \
     inc/QyncBackend.h \
     inc/QyncBuddyObject.h \
-    inc/QyncGroupObject.h \
     inc/QyncSipe.h \
     src/QyncSipeUtils.h \
     siplcs/src/api/sipe-backend.h \

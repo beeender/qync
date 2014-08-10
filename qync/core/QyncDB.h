@@ -1,32 +1,27 @@
 #ifndef QYNCDB_H
 #define QYNCDB_H
 
-#include <QString>
 #include <QSqlDatabase>
-#include <QList>
 #include <QSharedPointer>
 
-#include "QyncBuddyObject.h"
-#include "QyncGroupObject.h"
-
+class QString;
+class QyncBuddy;
+class QyncGroup;
+class QyncCategoryListModel;
 class QyncDB {
     public:
         QyncDB();
         ~QyncDB();
 
-        void init(const QString &account);
-        const QSharedPointer<QyncGroupObject> addGroup(const QString &groupName);
-        const QSharedPointer<QyncBuddyObject> addBuddy(const QString &name, const QString &alias, const QString &groupName);
+        void init(const QString &account, QyncCategoryListModel &groupList);
+        void insertGroup(const QSharedPointer<QyncGroup> group);
+        void insertBuddy(const QSharedPointer<QyncBuddy> buddy);
 
-        const QList< QSharedPointer<QyncBuddyObject> > &getBuddyList() const { return mBuddyList; };
-        const QList< QSharedPointer<QyncGroupObject> > &getGroupList() const { return mGroupList; };
     private:
         QSqlDatabase mDb;
-        QList< QSharedPointer<QyncBuddyObject> > mBuddyList;
-        QList< QSharedPointer<QyncGroupObject> > mGroupList;
 
-        void loadGroups();
-        void loadBuddies();
+        void loadGroups(QyncCategoryListModel &groupList);
+        void loadBuddies(QyncCategoryListModel &groupList);
 };
 
 #endif

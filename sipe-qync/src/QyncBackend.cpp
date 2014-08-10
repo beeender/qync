@@ -62,12 +62,18 @@ bool QyncBackend::addGroup(const gchar *groupName)
     return mQyncSipe->addGroup(QString(groupName));
 }
 
-QyncBuddyObject *QyncBackend::findBuddy(const gchar* buddyName, const gchar* groupName)
+const QyncBuddyObject *QyncBackend::findBuddy(const gchar* buddyName, const gchar* groupName)
 {
     return mQyncSipe->findBuddy(QString(buddyName), QString(groupName));
 }
 
-QyncBuddyObject *QyncBackend::addBuddy(const gchar *buddyName, const gchar *alias, const gchar *groupName)
+const QyncBuddyObject *QyncBackend::addBuddy(const gchar *buddyName, const gchar *alias, const gchar *groupName)
 {
     return mQyncSipe->addBuddy(buddyName, alias, groupName);
 }
+
+const gchar *QyncBackend::getBuddyPhotoHash(const gchar *buddyName)
+{
+    return mQyncSipe->getBuddyPhotoHash(buddyName).data();
+}
+

@@ -1,4 +1,8 @@
+#define QYNCSIPECORE_CPP
+
 #include "QyncSipeCore.h"
+#include "QyncCategoryListModel.h"
+#include "QyncGroup.h"
 
 QyncSipeCore::QyncSipeCore(QObject* /*parent*/, bool threadedBackend)
     :QyncSipe(threadedBackend),
@@ -23,13 +27,7 @@ bool QyncSipeCore::start()
     loginInfo.emailUrl = mEmailUrl;
     loginInfo.sso = mSso;
 
-    mDb.init(mAccountName);
-    foreach(QSharedPointer<QyncGroupObject> group, mDb.getGroupList()) {
-        mGroupListModel->addGroup(group);
-    }
-    foreach(QSharedPointer<QyncBuddyObject> buddy, mDb.getBuddyList()) {
-        mGroupListModel->addBuddy(buddy);
-    }
+    mDb.init(mAccountName, *mGroupListModel);
 
     //login(loginInfo);
     //FIXME:For testing.
@@ -46,28 +44,45 @@ void QyncSipeCore::setStatus(LoginStatusE s)
 
 bool QyncSipeCore::addGroup(const QString &groupName)
 {
-    const QSharedPointer<QyncGroupObject> group = mDb.addGroup(groupName);
-    if (group.isNull()) return false;
+    QSharedPointer<QyncGroup> group =
+        mGroupListModel->findGroup(groupName);
 
+    if(!group.isNull()) return true;
+
+    //TODO: Should be atom operation
+    group = QSharedPointer<QyncGroup>(new QyncGroup(groupName));
     mGroupListModel->addGroup(group);
+    mDb.insertGroup(group);
+
     return true;
 }
 
-QyncBuddyObject *QyncSipeCore::findBuddy(const QString &buddyName, const QString &groupName)
+const QyncBuddy *QyncSipeCore::findBuddy(const QString &buddyName, const QString &groupName)
 {
-    foreach(QSharedPointer<QyncBuddyObject> buddy, mDb.getBuddyList()) {
-        if (buddy->getName().compare(buddyName) == 0 &&
-                buddy->getGroup().compare(groupName) == 0) {
-            return buddy.data();
-        }
-    }
+    QSharedPointer<QyncBuddy> buddy =
+        mGroupListModel->findBuddy(buddyName, groupName);
 
-    return NULL;
+    if (buddy.isNull()) return NULL;
+
+    return buddy.data();
 }
 
-QyncBuddyObject *QyncSipeCore::addBuddy(const QString &buddyName, const QString &alias, const QString &groupName)
+const QyncBuddy *QyncSipeCore::addBuddy(const QString &buddyName, const QString &alias, const QString &groupName)
 {
-    QSharedPointer<QyncBuddyObject> buddy = mDb.addBuddy(buddyName, alias, groupName);
-    mGroupListModel->addBuddy(buddy);
-    return buddy.data();
+    const QyncBuddy* buddy = findBuddy(buddyName, groupName);
+    if (buddy) return buddy;
+
+    QSharedPointer<QyncGroup> group =
+        mGroupListModel->findGroup(groupName);
+    if(group.isNull()) {
+        qFatal("Group %s doesn't exist yet!", groupName.toStdString().c_str());
+    }
+
+    //TODO: Should be atom operation
+    QSharedPointer<QyncBuddy> buddyPtr(new QyncBuddy(buddyName));
+    buddyPtr->setAlias(alias);
+    mGroupListModel->addBuddy(buddyPtr);
+    mDb.insertBuddy(buddyPtr);
+
+    return buddyPtr.data();
 }

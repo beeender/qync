@@ -5,10 +5,10 @@
 #include <QAbstractListModel>
 #include <QSharedPointer>
 
-#include "QyncBuddyObject.h"
-#include "QyncGroupObject.h"
 #include "QyncBuddyListModel.h"
 
+class QyncBuddy;
+class QyncGroup;
 class QyncCategoryListModel: public QAbstractListModel
 {
     Q_OBJECT
@@ -25,16 +25,22 @@ public:
     virtual QHash<int, QByteArray> roleNames() const;
     virtual int rowCount(const QModelIndex & parent = QModelIndex()) const;
     QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
-    void addBuddy(const QSharedPointer<QyncBuddyObject> &buddy);
-    void addGroup(const QSharedPointer<QyncGroupObject> &group);
+    void addBuddy(const QSharedPointer<QyncBuddy> &buddy);
+    //Add an "group unknown" buddy. Only for DB init.
+    void addBuddy(const QSharedPointer<QyncBuddy> &buddy, const QString &groupName);
+    void addGroup(const QSharedPointer<QyncGroup> &group);
+    QSharedPointer<QyncGroup> findGroup(const QString &groupName);
+    QSharedPointer<QyncBuddy> findBuddy(const QString &buddyName, const QString &groupName);
+
+    //QML calls
     Q_INVOKABLE QObject *getBuddyListModel(int index);
 
 private:
     struct Category {
-        Category(const QSharedPointer<QyncGroupObject> group) : mGroup(group) {};
-        QSharedPointer<QyncGroupObject> mGroup;
+        Category(const QSharedPointer<QyncGroup> group) : mGroup(group) {};
+        QSharedPointer<QyncGroup> mGroup;
         QyncBuddyListModel mBuddyListModel;
-        const QString &getName() { return mGroup->getName(); };
+        const QString getName() { return mGroup->getName(); };
     };
 
     QList<Category *> mCategoryList;

@@ -5,8 +5,8 @@
 #include <QAbstractListModel>
 #include <QSharedPointer>
 
-#include "QyncBuddyObject.h"
-#include "QyncGroupObject.h"
+#include "QyncBuddy.h"
+#include "QyncGroup.h"
 
 class QyncBuddyListModel: public QAbstractListModel
 {
@@ -18,16 +18,16 @@ public:
     };
 
     QyncBuddyListModel(QObject *parent = 0);
-    QyncBuddyListModel(const QList<QyncBuddyObject *> buddyList, QObject *parent = 0);
     virtual ~QyncBuddyListModel();
 
     virtual QHash<int, QByteArray> roleNames() const;
     virtual int rowCount(const QModelIndex & parent = QModelIndex()) const;
     QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
-    void addBuddy(const QSharedPointer<QyncBuddyObject> &buddy);
+    void addBuddy(const QSharedPointer<QyncBuddy> &buddy);
+    QSharedPointer<QyncBuddy> findBuddy(const QString &name) const;
 
 private:
-    QList< QSharedPointer<QyncBuddyObject> > mBuddyList;
+    QList< QSharedPointer<QyncBuddy> > mBuddyList;
 };
 
 #endif

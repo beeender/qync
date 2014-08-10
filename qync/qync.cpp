@@ -5,8 +5,8 @@
 #include <QtQuick/QQuickView>
 
 #include "QyncSipeCore.h"
-
 #include "QyncBuddyListModel.h"
+#include "QyncCategoryListModel.h"
 
 int main(int argc, char **argv)
 {

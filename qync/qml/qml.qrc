@@ -5,7 +5,6 @@
         <file>BuddyListView.qml</file>
         <file>LoginView.qml</file>
         <file>LoginWaitingView.qml</file>
-        <file>BuddyWidget.qml</file>
-        <file>BuddyListItem.qml</file>
+        <file>BuddyItem.qml</file>
     </qresource>
 </RCC>

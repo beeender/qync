@@ -18,15 +18,11 @@ ScrollView {
                     text: groupName
                 }
                 ListView {
-                    height: 30*count
-                    width: 320
+                    height: 40 * count
+                    width: parent.width
                     model: buddyListModel
                     interactive: false
-                    delegate:  Column {
-                        Text {
-                            id: aliasText
-                            text: aliasName
-                        }
+                    delegate:  BuddyItem {
                     }
                 }
             }

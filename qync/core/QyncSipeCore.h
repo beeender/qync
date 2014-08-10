@@ -6,12 +6,11 @@
 
 #include "QyncSipe.h"
 
-#include "QyncBuddyObject.h"
-#include "QyncGroupObject.h"
-#include "QyncCategoryListModel.h"
+#include "QyncBuddy.h"
 #include "QyncDB.h"
 
 class QyncBackend;
+class QyncCategoryListModel;
 class QyncSipeCore : public QyncSipe
 {
     Q_OBJECT
@@ -50,9 +49,10 @@ class QyncSipeCore : public QyncSipe
         QyncSipe::LoginStatusE mStatus;
 
         void setStatus(const QyncSipe::LoginStatusE s);
-        QyncBuddyObject *addBuddy(const QString &buddyName, const QString &alias, const QString &groupName);
-        QyncBuddyObject *findBuddy(const QString &buddyName, const QString &groupName);
+        const QyncBuddy *addBuddy(const QString &buddyName, const QString &alias, const QString &groupName);
+        const QyncBuddy *findBuddy(const QString &buddyName, const QString &groupName);
         bool addGroup(const QString &groupName);
+
     private slots:
 
     signals:

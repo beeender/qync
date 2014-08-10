@@ -39,15 +39,19 @@ class QyncSipe : public QObject
 
         //Callback functions called by the backend
         virtual void setStatus(const LoginStatusE s) = 0;
-        virtual QyncBuddyObject *addBuddy(const QString &buddyName, const QString &alias, const QString &groupName) = 0;
-        virtual QyncBuddyObject *findBuddy(const QString &buddyName, const QString &groupName) = 0;
+        virtual const QyncBuddyObject *addBuddy(const QString &buddyName, const QString &alias, const QString &groupName) = 0;
+        virtual const QyncBuddyObject *findBuddy(const QString &buddyName, const QString &groupName) = 0;
         virtual bool addGroup(const QString &group) = 0;
+        //Return hash string which is corresponding the given buddy.
+        //The hash sting needs to be hold by the frontend.
+        virtual const QByteArray &getBuddyPhotoHash(const QString &buddyName) { return a; };
 
         //Interfaces for the frontend
         void login(const LoginInfo &loginInfo);
     private:
         QyncBackend *mBackend;
         QThread *mBackendThread;
+        QByteArray a;
 };
 
 Q_DECLARE_METATYPE(QyncSipe::LoginInfo);
