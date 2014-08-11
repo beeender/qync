@@ -63,7 +63,7 @@ bool QyncSipeCore::addGroup(const QString &groupName)
 
 const QByteArray *QyncSipeCore::getBuddyPhotoHash(const QString &buddyName)
 {
-    QSharedPointer<QyncCommonBuddy> buddy = QyncCommonBuddy::findCommonBuddy(buddyName);
+    QSharedPointer<QyncBuddy> buddy = mGroupListModel->findBuddy(buddyName);
     if (buddy.isNull()) return nullptr;
 
     const QByteArray *imgName = buddy->getImageName();
@@ -83,6 +83,13 @@ const QyncBuddy *QyncSipeCore::findBuddy(const QString &buddyName, const QString
     if (buddy.isNull()) return NULL;
 
     return buddy.data();
+}
+
+const QList<QyncBuddyObject*> QyncSipeCore::findAllBuddies(const QString &buddyName, const QString &groupName)
+{
+    QList<QyncBuddyObject*> list = mGroupListModel->findAllBuddies(buddyName, groupName);
+
+    return list;
 }
 
 const QyncBuddy *QyncSipeCore::addBuddy(const QString &buddyName, const QString &alias, const QString &groupName)

@@ -18,6 +18,7 @@ class QyncBackend: public QObject
         void setStatus(guint status);
         bool addGroup(const gchar *groupName);
         const QyncBuddyObject *findBuddy(const gchar *buddyName, const gchar *groupName);
+        GSList *findAllBuddies(const gchar *buddyName, const gchar *groupName);
         const QyncBuddyObject *addBuddy(const gchar *buddyName, const gchar *alias, const gchar *groupName);
         const gchar *getBuddyPhotoHash(const gchar *buddyName);
 

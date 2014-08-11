@@ -12,6 +12,7 @@ TARGET = sipe-qync
 TEMPLATE = lib
 CONFIG += staticlib
 CONFIG += create_prl
+CONFIG += c++11
 
 DEFINES += SIPEQYNC_LIBRARY
 

@@ -25,6 +25,8 @@ public:
     QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
     void addBuddy(const QSharedPointer<QyncBuddy> &buddy);
     QSharedPointer<QyncBuddy> findBuddy(const QString &name) const;
+    //TODO: Not good enough. const QyncBuddy would be better.
+    const QList< QSharedPointer<QyncBuddy> > &getAllBuddies() { return mBuddyList; };
 
 private:
     QList< QSharedPointer<QyncBuddy> > mBuddyList;

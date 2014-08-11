@@ -67,6 +67,18 @@ const QyncBuddyObject *QyncBackend::findBuddy(const gchar* buddyName, const gcha
     return mQyncSipe->findBuddy(QString(buddyName), QString(groupName));
 }
 
+GSList *QyncBackend::findAllBuddies(const gchar *buddyName, const gchar *groupName)
+{
+    GSList *gList = NULL;
+    QList<QyncBuddyObject*> qList = mQyncSipe->findAllBuddies(QString(buddyName), QString(groupName));
+
+    foreach(auto it, qList) {
+        gList = g_slist_append(gList, it);
+    }
+
+    return gList;
+}
+
 const QyncBuddyObject *QyncBackend::addBuddy(const gchar *buddyName, const gchar *alias, const gchar *groupName)
 {
     return mQyncSipe->addBuddy(buddyName, alias, groupName);

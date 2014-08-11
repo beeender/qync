@@ -129,6 +129,37 @@ QSharedPointer<QyncBuddy> QyncCategoryListModel::findBuddy(const QString &buddyN
     return bListModel->findBuddy(buddyName);
 }
 
+QSharedPointer<QyncBuddy> QyncCategoryListModel::findBuddy(const QString &buddyName)
+{
+    QSharedPointer<QyncBuddy> buddy;
+    foreach(auto cat, mCategoryList) {
+        auto b = cat->mBuddyListModel.findBuddy(buddyName);
+        if (b.isNull()) continue;
+        buddy = b;
+    }
+
+    return buddy;
+}
+
+QList<QyncBuddyObject *> QyncCategoryListModel::findAllBuddies(const QString &buddyName, const QString &groupName)
+{
+    QList<QyncBuddyObject *> list;
+    foreach (auto cat, mCategoryList) {
+        if (groupName.isEmpty() || cat->mGroup->getName().compare(groupName) == 0) {
+            if (buddyName.isEmpty()) {
+                foreach (auto buddy, cat->mBuddyListModel.getAllBuddies()) {
+                    list.append(buddy.data());
+                }
+            } else {
+                auto buddy = cat->mBuddyListModel.findBuddy(buddyName);
+                if (!buddy.isNull()) list.append(buddy.data());
+            }
+        }
+    }
+
+    return list;
+}
+
 QObject *QyncCategoryListModel::getBuddyListModel(int index)
 {
     if (index < 0 || index >= mCategoryList.size()) return nullptr;

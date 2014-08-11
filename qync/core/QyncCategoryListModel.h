@@ -31,6 +31,11 @@ public:
     void addGroup(const QSharedPointer<QyncGroup> &group);
     QSharedPointer<QyncGroup> findGroup(const QString &groupName);
     QSharedPointer<QyncBuddy> findBuddy(const QString &buddyName, const QString &groupName);
+    //This will find the first buddy in the whole lists
+    QSharedPointer<QyncBuddy> findBuddy(const QString &buddyName);
+    //This will traverse all buddies.
+    //If buddyName or groupName is empty, it will return all buddies.
+    QList<QyncBuddyObject *> findAllBuddies(const QString &buddyName, const QString &groupName);
 
     //QML calls
     Q_INVOKABLE QObject *getBuddyListModel(int index);
