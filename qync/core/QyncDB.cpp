@@ -3,6 +3,8 @@
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QString>
+#include <QCryptographicHash>
+#include <QDir>
 
 #include "QyncDB.h"
 #include "QyncBuddy.h"
@@ -22,6 +24,7 @@ const static char *CREATE_BUDDY_TABLE =
      name TEXT NOT NULL, \
      alias TEXT, \
      groupid INTEGER, \
+     image TEXT, \
      FOREIGN KEY(groupid) REFERENCES buddygroup(id))";
 const static char *INSERT_GROUP =
     "INSERT INTO buddygroup values(NULL, '%1')";
@@ -32,7 +35,11 @@ const static char *SELECT_ALL_GROUPS =
 const static char *SELECT_ALL_BUDDIES=
     "SELECT buddy.id, buddy.name, buddy.alias, buddy.groupid, buddygroup.name FROM buddy, buddygroup where buddy.groupid = buddygroup.id";
 
-QyncDB::QyncDB()
+const static char *BASE_DIR = ".qync";
+const static char *IMAGE_BASE_DIR = "images";
+const static char *DB_NAME = "qync.db";
+
+QyncDB::QyncDB() : mDb(), mBaseDir()
 {
 }
 
@@ -41,10 +48,20 @@ QyncDB::~QyncDB()
     mDb.close();
 }
 
-void QyncDB::init(const QString & /*account*/, QyncCategoryListModel &groupList)
+void QyncDB::init(const QString &account, QyncCategoryListModel &groupList)
 {
+    if (!mBaseDir.isEmpty()) qFatal("QyncDB cannot be inited twice!");
+
+    mBaseDir = QString("%1/%2/%3/").arg(QDir::home().absolutePath(), BASE_DIR,
+            QString(QCryptographicHash::hash(account.toUtf8(), QCryptographicHash::Md5).toHex()));
+    QDir dir(mBaseDir);
+    if (!dir.exists()) dir.mkpath(".");
+    mDbPath =  QString("%1%2").arg(mBaseDir, DB_NAME);
+    mImageDir = QString("%1%2/").arg(mBaseDir, IMAGE_BASE_DIR);
+
+
     mDb = QSqlDatabase::addDatabase("QSQLITE");
-    mDb.setDatabaseName("database.db");
+    mDb.setDatabaseName(mDbPath);
 
     if(!mDb.open()) {
         qFatal("QyncDB: Cannot open database. %s", mDb.lastError().text().toStdString().c_str()) ;

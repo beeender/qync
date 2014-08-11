@@ -19,6 +19,9 @@ class QyncDB {
 
     private:
         QSqlDatabase mDb;
+        QString mBaseDir;
+        QString mDbPath;
+        QString mImageDir;
 
         void loadGroups(QyncCategoryListModel &groupList);
         void loadBuddies(QyncCategoryListModel &groupList);
