@@ -44,7 +44,7 @@ class QyncSipe : public QObject
         virtual bool addGroup(const QString &group) = 0;
         //Return hash string which is corresponding the given buddy.
         //The hash sting needs to be hold by the frontend.
-        virtual const QByteArray &getBuddyPhotoHash(const QString &buddyName) { return a; };
+        virtual const QByteArray *getBuddyPhotoHash(const QString &buddyName) = 0;
 
         //Interfaces for the frontend
         void login(const LoginInfo &loginInfo);

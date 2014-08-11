@@ -191,8 +191,9 @@ void sipe_backend_buddy_set_photo(struct sipe_core_public *sipe_public,
 const gchar *sipe_backend_buddy_get_photo_hash(struct sipe_core_public *sipe_public,
 					       const gchar *who)
 {
-	SIPE_DEBUG_INFO("STUB %s", __func__);
-    return "";
+    SIPE_DEBUG_INFO("%s", __func__);
+    QyncBackend *backend = (QyncBackend *)sipe_public->backend_private;
+    return backend->getBuddyPhotoHash(who);
 }
 
 gboolean sipe_backend_buddy_group_add(struct sipe_core_public *sipe_public,

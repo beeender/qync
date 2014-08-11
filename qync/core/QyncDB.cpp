@@ -29,7 +29,7 @@ const static char *CREATE_BUDDY_TABLE =
 const static char *INSERT_GROUP =
     "INSERT INTO buddygroup values(NULL, '%1')";
 const static char *INSERT_BUDDY=
-    "INSERT INTO buddy values(NULL, '%1', '%2', '%3')";
+    "INSERT INTO buddy values(NULL, '%1', '%2', '%3', '%4')";
 const static char *SELECT_ALL_GROUPS =
     "SELECT id, name FROM buddygroup";
 const static char *SELECT_ALL_BUDDIES=
@@ -39,7 +39,11 @@ const static char *BASE_DIR = ".qync";
 const static char *IMAGE_BASE_DIR = "images";
 const static char *DB_NAME = "qync.db";
 
-QyncDB::QyncDB() : mDb(), mBaseDir()
+QString QyncDB::mBaseDir;
+QString QyncDB::mDbPath;
+QString QyncDB::mImageDir;
+
+QyncDB::QyncDB() : mDb()
 {
 }
 
@@ -116,14 +120,14 @@ void QyncDB::loadBuddies(QyncCategoryListModel &groupList)
     }
 
     while (query.next()) {
-        int id = query.value(0).toInt();
+        qint32 id = query.value(0).toInt();
         QString name = query.value(1).toString();
         QString alias = query.value(2).toString();
-        quint32 groupId = query.value(3).toInt();
         QString groupName = query.value(4).toString();
 
         QyncBuddy *obj = new QyncBuddy(name);
         obj->setAlias(alias);
+        obj->setId(id);
         //Group will be set by addBuddy
         groupList.addBuddy(QSharedPointer<QyncBuddy>(obj), groupName);
     }
@@ -132,9 +136,8 @@ void QyncDB::loadBuddies(QyncCategoryListModel &groupList)
 void QyncDB::insertBuddy(const QSharedPointer<QyncBuddy> buddy)
 {
     QSqlQuery query;
-    QyncBuddy *obj = NULL;
     if (query.exec(QString(INSERT_BUDDY).arg(buddy->getName(),
-                    buddy->getAlias()).arg(buddy->getGroup()->getId()))) {
+                    buddy->getAlias()).arg(buddy->getGroup()->getId()).arg(""))) {
         //qint32 id = query.lastInsertId().toInt();
     } else {
         qFatal("QyncDB: %s", SQL_ERROR_STR(query.lastError()));

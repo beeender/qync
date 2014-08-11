@@ -17,11 +17,13 @@ class QyncDB {
         void insertGroup(const QSharedPointer<QyncGroup> group);
         void insertBuddy(const QSharedPointer<QyncBuddy> buddy);
 
+        static QString getImageDir() { return mImageDir; };
+
     private:
         QSqlDatabase mDb;
-        QString mBaseDir;
-        QString mDbPath;
-        QString mImageDir;
+        static QString mBaseDir;
+        static QString mDbPath;
+        static QString mImageDir;
 
         void loadGroups(QyncCategoryListModel &groupList);
         void loadBuddies(QyncCategoryListModel &groupList);

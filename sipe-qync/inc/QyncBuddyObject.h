@@ -8,11 +8,11 @@ class QyncBuddyObject
     public:
         virtual ~QyncBuddyObject();
 
-        virtual const QString getName() const = 0;
-        virtual const QString getAlias() const = 0;
+        virtual QString getName() const = 0;
+        virtual QString getAlias() const = 0;
 
     protected:
         QyncBuddyObject();
 };
 
-#endif
+#endif //QYNCBUDDYOBJECT_H

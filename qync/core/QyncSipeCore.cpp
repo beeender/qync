@@ -3,6 +3,7 @@
 #include "QyncSipeCore.h"
 #include "QyncCategoryListModel.h"
 #include "QyncGroup.h"
+#include "QyncUtils.h"
 
 QyncSipeCore::QyncSipeCore(QObject* /*parent*/, bool threadedBackend)
     :QyncSipe(threadedBackend),
@@ -29,10 +30,13 @@ bool QyncSipeCore::start()
 
     mDb.init(mAccountName, *mGroupListModel);
 
-    //login(loginInfo);
+    login(loginInfo);
+
     //FIXME:For testing.
+#if 0
     setStatus(StatusInProcess);
     setStatus(StatusActive);
+#endif
     return true;
 }
 
@@ -55,6 +59,20 @@ bool QyncSipeCore::addGroup(const QString &groupName)
     mDb.insertGroup(group);
 
     return true;
+}
+
+const QByteArray *QyncSipeCore::getBuddyPhotoHash(const QString &buddyName)
+{
+    QSharedPointer<QyncCommonBuddy> buddy = QyncCommonBuddy::findCommonBuddy(buddyName);
+    if (buddy.isNull()) return nullptr;
+
+    const QByteArray *imgName = buddy->getImageName();
+    if (!imgName->length()) return nullptr;
+
+    QByteArray checksum = QyncUtils::calImageChecksum(*imgName);
+    if (imgName == checksum) return imgName;
+
+    return nullptr;
 }
 
 const QyncBuddy *QyncSipeCore::findBuddy(const QString &buddyName, const QString &groupName)
@@ -80,6 +98,7 @@ const QyncBuddy *QyncSipeCore::addBuddy(const QString &buddyName, const QString 
 
     //TODO: Should be atom operation
     QSharedPointer<QyncBuddy> buddyPtr(new QyncBuddy(buddyName));
+    buddyPtr->setGroup(group);
     buddyPtr->setAlias(alias);
     mGroupListModel->addBuddy(buddyPtr);
     mDb.insertBuddy(buddyPtr);

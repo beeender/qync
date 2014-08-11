@@ -18,7 +18,8 @@ SOURCES += \
     core/QyncBuddyListModel.cpp \
     core/QyncCategoryListModel.cpp \
     core/QyncBuddy.cpp \
-    core/QyncGroup.cpp
+    core/QyncGroup.cpp \
+    core/QyncUtils.cpp
 
 RESOURCES += \
     qml/qml.qrc
@@ -38,4 +39,5 @@ HEADERS += \
     core/QyncBuddyListModel.h \
     core/QyncCategoryListModel.h \
     core/QyncBuddy.h \
-    core/QyncGroup.h
+    core/QyncGroup.h \
+    core/QyncUtils.h

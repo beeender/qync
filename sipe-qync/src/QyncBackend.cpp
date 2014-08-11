@@ -74,6 +74,8 @@ const QyncBuddyObject *QyncBackend::addBuddy(const gchar *buddyName, const gchar
 
 const gchar *QyncBackend::getBuddyPhotoHash(const gchar *buddyName)
 {
-    return mQyncSipe->getBuddyPhotoHash(buddyName).data();
+    const QByteArray *checksum = mQyncSipe->getBuddyPhotoHash(buddyName);
+    if (checksum) return checksum->data();
+    return NULL;
 }
 
