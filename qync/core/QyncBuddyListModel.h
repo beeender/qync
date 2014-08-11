@@ -14,7 +14,7 @@ class QyncBuddyListModel: public QAbstractListModel
 
 public:
     enum BuddyRoles {
-        AliasRole = Qt::UserRole + 1,
+        BuddyRole= Qt::UserRole + 1,
     };
 
     QyncBuddyListModel(QObject *parent = 0);

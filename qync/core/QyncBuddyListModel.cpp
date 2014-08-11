@@ -13,7 +13,7 @@ QyncBuddyListModel::~QyncBuddyListModel()
 
 QHash<int, QByteArray> QyncBuddyListModel::roleNames() const {
     QHash<int, QByteArray> roles;
-    roles[AliasRole] = "aliasName";
+    roles[BuddyRole] = "buddy";
     return roles;
 }
 
@@ -25,8 +25,8 @@ int QyncBuddyListModel::rowCount(const QModelIndex & /*parent*/) const
 QVariant QyncBuddyListModel::data(const QModelIndex & index, int role) const
 {
     switch (role) {
-        case AliasRole:
-            return QVariant(mBuddyList.at(index.row())->getAlias());
+        case BuddyRole:
+            return QVariant::fromValue<QObject *>(mBuddyList.at(index.row()).data());
         default:
             break;
     }

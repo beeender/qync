@@ -11,6 +11,8 @@ class QyncGroup;
 class QyncBuddy : public QObject, public QyncBuddyObject
 {
     Q_OBJECT
+    Q_PROPERTY(QString account READ getName)
+    Q_PROPERTY(QString alias READ getAlias)
 
     public:
         explicit QyncBuddy(const QString &account, QObject *parent = 0);

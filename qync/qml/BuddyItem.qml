@@ -14,7 +14,7 @@ Item {
 
         Text {
             id: aliasText
-            text: aliasName
+            text: buddy.alias
             font.pixelSize: 12
         }
     }
