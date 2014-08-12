@@ -47,8 +47,9 @@ gchar* sipe_backend_buddy_get_alias(struct sipe_core_public *sipe_public,
 gchar* sipe_backend_buddy_get_server_alias(struct sipe_core_public *sipe_public,
         const sipe_backend_buddy who)
 {
-    SIPE_DEBUG_INFO("STUB %s", __func__);
-    return "";
+    SIPE_DEBUG_INFO("%s", __func__);
+    QyncBuddyObject* buddy = (QyncBuddyObject *)who;
+    return g_strdup(buddy->getServerAlias().toStdString().c_str());
 }
 
 gchar *sipe_backend_buddy_get_local_alias(struct sipe_core_public *sipe_public,
