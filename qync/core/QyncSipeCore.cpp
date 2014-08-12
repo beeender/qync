@@ -30,10 +30,10 @@ bool QyncSipeCore::start()
 
     mDb.init(mAccountName, *mGroupListModel);
 
-    login(loginInfo);
+    //login(loginInfo);
 
     //FIXME:For testing.
-#if 0
+#if 1
     setStatus(StatusInProcess);
     setStatus(StatusActive);
 #endif
@@ -66,7 +66,7 @@ const QByteArray *QyncSipeCore::getBuddyPhotoHash(const QString &buddyName)
     QSharedPointer<QyncBuddy> buddy = mGroupListModel->findBuddy(buddyName);
     if (buddy.isNull()) return nullptr;
 
-    const QByteArray *imgName = buddy->getImageName();
+    const QByteArray *imgName = buddy->getImageHash();
     if (!imgName->length()) return nullptr;
 
     QByteArray checksum = QyncUtils::calImageChecksum(*imgName);

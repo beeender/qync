@@ -6,5 +6,6 @@
         <file>LoginView.qml</file>
         <file>LoginWaitingView.qml</file>
         <file>BuddyItem.qml</file>
+        <file>../images/DefaultBuddy.png</file>
     </qresource>
 </RCC>

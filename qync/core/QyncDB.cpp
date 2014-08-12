@@ -34,7 +34,8 @@ const static char *INSERT_BUDDY=
 const static char *SELECT_ALL_GROUPS =
     "SELECT id, name FROM buddygroup";
 const static char *SELECT_ALL_BUDDIES =
-    "SELECT buddy.id, buddy.name, buddy.alias, buddy.groupid, buddygroup.name FROM buddy, buddygroup where buddy.groupid = buddygroup.id";
+    "SELECT buddy.id, buddy.name, buddy.alias, buddy.groupid, buddygroup.name, buddy.image \
+        FROM buddy, buddygroup where buddy.groupid = buddygroup.id";
 const static char *UPDATE_BUDDY_IMAGE =
     "UPDATE buddy SET image = '%1' WHERE buddy.name = '%2'";
 
@@ -127,10 +128,12 @@ void QyncDB::loadBuddies(QyncCategoryListModel &groupList)
         QString name = query.value(1).toString();
         QString alias = query.value(2).toString();
         QString groupName = query.value(4).toString();
+        QString imageName = query.value(5).toString();
 
         QyncBuddy *obj = new QyncBuddy(name);
         obj->setAlias(alias);
         obj->setId(id);
+        obj->setImage(imageName);
         //Group will be set by addBuddy
         groupList.addBuddy(QSharedPointer<QyncBuddy>(obj), groupName);
     }

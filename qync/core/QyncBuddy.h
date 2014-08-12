@@ -5,6 +5,7 @@
 #include <QWeakPointer>
 #include <QList>
 #include <QByteArray>
+#include <QUrl>
 
 #include "QyncBuddyObject.h"
 
@@ -12,16 +13,18 @@ class QyncGroup;
 class QyncBuddy : public QObject, public QyncBuddyObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString account READ getName)
-    Q_PROPERTY(QString alias READ getAlias)
+    Q_PROPERTY(QString account READ getName NOTIFY onChanged)
+    Q_PROPERTY(QString alias READ getAlias NOTIFY onChanged)
+    Q_PROPERTY(QUrl imageUrl READ getImageUrl NOTIFY onChanged)
 
     public:
         explicit QyncBuddy(const QString &account, QObject *parent = 0);
         virtual ~QyncBuddy();
 
         void setAlias(const QString &alias) { mBuddy->mAlias = alias; };
-        void setImage(const QByteArray &checksum);
-        const QByteArray *getImageName() const { return &mBuddy->mImageName; };
+        void setImage(const QString &imgName);
+        const QByteArray *getImageHash() const { return &mBuddy->mImageName; };
+        QUrl getImageUrl() const;
         void setGroup(const QSharedPointer<const QyncGroup> group);
         void setId(const qint32 id) { mId = id; };
         const QSharedPointer<const QyncGroup> getGroup() const { return mGroup; }
@@ -54,6 +57,9 @@ class QyncBuddy : public QObject, public QyncBuddyObject
         QSharedPointer<Buddy> mBuddy;
         QSharedPointer<const QyncGroup> mGroup;
         qint32 mId;
+
+    signals:
+        void onChanged();
 };
 
 #endif // QYNCBUDDY_H

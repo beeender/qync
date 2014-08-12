@@ -1,7 +1,10 @@
 #define QYNCBUDDY_CPP
 
+#include <QFile>
+
 #include "QyncBuddy.h"
 #include "QyncGroup.h"
+#include "QyncDB.h"
 
 QList< QWeakPointer<QyncBuddy::Buddy> > QyncBuddy::Buddy::mBuddyPool;
 
@@ -64,9 +67,21 @@ QyncBuddy::~QyncBuddy()
 {
 }
 
-void QyncBuddy::setImage(const QByteArray &checksum)
+void QyncBuddy::setImage(const QString &imgName)
 {
-    mBuddy->mImageName = checksum;
+    mBuddy->mImageName = imgName.toLatin1();
+}
+
+QUrl QyncBuddy::getImageUrl() const
+{
+    QString str = QString("%1/%2").arg(QyncDB::getImageDir()).arg(QString(mBuddy->mImageName));
+    QFile file(str);
+    if (!mBuddy->mImageName.isEmpty() && file.exists()) {
+        return QUrl::fromLocalFile(str);
+    }
+
+    //Use the default buddy image
+    return QUrl("qrc:/images/DefaultBuddy.png");
 }
 
 void QyncBuddy::setGroup(const QSharedPointer<const QyncGroup> group)
