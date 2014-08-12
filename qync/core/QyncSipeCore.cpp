@@ -112,3 +112,11 @@ const QyncBuddy *QyncSipeCore::addBuddy(const QString &buddyName, const QString 
 
     return buddyPtr.data();
 }
+
+void QyncSipeCore::setBuddyPhoto(const QString &buddyName, const QByteArray &imgData, const QByteArray &hash)
+{
+    if (QyncUtils::writeImage(imgData, hash)) {
+        mDb.updateImage(buddyName, hash);
+    }
+}
+

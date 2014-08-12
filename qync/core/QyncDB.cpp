@@ -5,6 +5,7 @@
 #include <QString>
 #include <QCryptographicHash>
 #include <QDir>
+#include <QtDebug>
 
 #include "QyncDB.h"
 #include "QyncBuddy.h"
@@ -29,11 +30,13 @@ const static char *CREATE_BUDDY_TABLE =
 const static char *INSERT_GROUP =
     "INSERT INTO buddygroup values(NULL, '%1')";
 const static char *INSERT_BUDDY=
-    "INSERT INTO buddy values(NULL, '%1', '%2', '%3', '%4')";
+    "INSERT INTO buddy (name, alias, groupid) VALUES('%1', '%2', '%3')";
 const static char *SELECT_ALL_GROUPS =
     "SELECT id, name FROM buddygroup";
-const static char *SELECT_ALL_BUDDIES=
+const static char *SELECT_ALL_BUDDIES =
     "SELECT buddy.id, buddy.name, buddy.alias, buddy.groupid, buddygroup.name FROM buddy, buddygroup where buddy.groupid = buddygroup.id";
+const static char *UPDATE_BUDDY_IMAGE =
+    "UPDATE buddy SET image = '%1' WHERE buddy.name = '%2'";
 
 const static char *BASE_DIR = ".qync";
 const static char *IMAGE_BASE_DIR = "images";
@@ -136,11 +139,19 @@ void QyncDB::loadBuddies(QyncCategoryListModel &groupList)
 void QyncDB::insertBuddy(const QSharedPointer<QyncBuddy> buddy)
 {
     QSqlQuery query;
-    if (query.exec(QString(INSERT_BUDDY).arg(buddy->getName(),
-                    buddy->getAlias()).arg(buddy->getGroup()->getId()).arg(""))) {
+    if (query.exec(QString(INSERT_BUDDY).arg(buddy->getName()).
+                    arg(buddy->getAlias()).arg(buddy->getGroup()->getId()))) {
         //qint32 id = query.lastInsertId().toInt();
     } else {
         qFatal("QyncDB: %s", SQL_ERROR_STR(query.lastError()));
+    }
+}
+
+void QyncDB::updateImage(const QString &buddyName, const QString &imgName)
+{
+    QSqlQuery query;
+    if (!query.exec(QString(UPDATE_BUDDY_IMAGE).arg(imgName).arg(buddyName))) {
+        qWarning() << "Failed to update image " << imgName << " for " << buddyName;
     }
 }
 

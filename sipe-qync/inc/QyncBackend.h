@@ -21,6 +21,7 @@ class QyncBackend: public QObject
         GSList *findAllBuddies(const gchar *buddyName, const gchar *groupName);
         const QyncBuddyObject *addBuddy(const gchar *buddyName, const gchar *alias, const gchar *groupName);
         const gchar *getBuddyPhotoHash(const gchar *buddyName);
+        void setBuddyPhoto(const gchar *buddyName, gpointer imgData, const gsize imgSize, const gchar *imgHash);
 
     signals:
         //Signals should only be emitted by QyncSipe

@@ -1,7 +1,5 @@
 #include <glib.h>
 
-#include <QString>
-
 #include "sipe-backend.h"
 #include "sipe-core.h"
 #include "QyncBackend.h"
@@ -71,7 +69,7 @@ gchar* sipe_backend_buddy_get_string(struct sipe_core_public *sipe_public,
         const sipe_buddy_info_fields key)
 {
     SIPE_DEBUG_INFO("STUB %s", __func__);
-    return "";
+    return g_strdup("");
 }
 
 void sipe_backend_buddy_set_string(struct sipe_core_public *sipe_public,
@@ -190,7 +188,10 @@ void sipe_backend_buddy_set_photo(struct sipe_core_public *sipe_public,
         gsize image_len,
         const gchar *photo_hash)
 {
-    SIPE_DEBUG_INFO("STUB %s", __func__);
+    SIPE_DEBUG_INFO("%s", __func__);
+
+    QyncBackend *backend = (QyncBackend *)sipe_public->backend_private;
+    backend->setBuddyPhoto(who, image_data, image_len, photo_hash);
 }
 
 const gchar *sipe_backend_buddy_get_photo_hash(struct sipe_core_public *sipe_public,

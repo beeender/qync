@@ -54,6 +54,7 @@ class QyncSipeCore : public QyncSipe
         const QList<QyncBuddyObject*> findAllBuddies(const QString &buddyName, const QString &groupName);
         bool addGroup(const QString &groupName);
         const QByteArray *getBuddyPhotoHash(const QString &buddyName);
+        void setBuddyPhoto(const QString &buddyName, const QByteArray &imgData, const QByteArray &hash);
 
     private slots:
 

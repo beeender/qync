@@ -16,6 +16,7 @@ class QyncDB {
         void init(const QString &account, QyncCategoryListModel &groupList);
         void insertGroup(const QSharedPointer<QyncGroup> group);
         void insertBuddy(const QSharedPointer<QyncBuddy> buddy);
+        void updateImage(const QString &buddyName, const QString &imgName);
 
         static QString getImageDir() { return mImageDir; };
 

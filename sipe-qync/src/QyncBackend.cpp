@@ -23,7 +23,7 @@ void QyncBackend::doLogin(const QyncSipe::LoginInfo &loginInfo)
 {
     const gchar *errmsg;
 
-    gchar *username = (gchar *)loginInfo.accountName.toStdString().c_str();
+    gchar *userName = (gchar *)loginInfo.accountName.toStdString().c_str();
     QStringList domainUser = loginInfo.domainUser.split("\\", QString::KeepEmptyParts);
 
     int ttype = SIPE_TRANSPORT_AUTO;
@@ -91,3 +91,9 @@ const gchar *QyncBackend::getBuddyPhotoHash(const gchar *buddyName)
     return NULL;
 }
 
+void QyncBackend::setBuddyPhoto(const gchar *buddyName, gpointer imgData, const gsize imgSize, const gchar *imgHash)
+{
+    mQyncSipe->setBuddyPhoto(QString(buddyName),
+            QByteArray::fromRawData((const char *)imgData, imgSize),
+            QByteArray::fromRawData(imgHash, strlen(imgHash)));
+}

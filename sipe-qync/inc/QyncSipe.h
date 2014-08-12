@@ -47,6 +47,7 @@ class QyncSipe : public QObject
         //Return hash string which is corresponding the given buddy.
         //The hash sting needs to be hold by the frontend.
         virtual const QByteArray *getBuddyPhotoHash(const QString &buddyName) = 0;
+        virtual void setBuddyPhoto(const QString &buddyName, const QByteArray &imgData, const QByteArray &hash) = 0;
 
         //Interfaces for the frontend
         void login(const LoginInfo &loginInfo);
