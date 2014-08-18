@@ -15,6 +15,7 @@ class QyncBuddyObject
         virtual QString getServerAlias() const { return getAlias(); };
         virtual QString getGroupName() const = 0;
         virtual QString getPropertyString(const QyncSipe::BuddyInfoFieldE field) const = 0;
+        virtual bool isBlocked() const { return false; };
 
     protected:
         QyncBuddyObject();
