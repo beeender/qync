@@ -59,3 +59,8 @@ int QyncSipeUtils::QyncStatusToSipe(QyncSipe::LoginStatusE status)
     return SIPE_ACTIVITY_OFFLINE;
 }
 
+QyncSipe::BuddyInfoFieldE QyncSipeUtils::SipeBuddyInfoFieldToQync(const int field)
+{
+    return static_cast<QyncSipe::BuddyInfoFieldE>(field);
+}
+

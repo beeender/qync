@@ -97,3 +97,11 @@ void QyncBackend::setBuddyPhoto(const gchar *buddyName, gpointer imgData, const 
             QByteArray::fromRawData((const char *)imgData, imgSize),
             QByteArray::fromRawData(imgHash, strlen(imgHash)));
 }
+
+void QyncBackend::setBuddyProperty(const QyncBuddyObject *buddy, const int property, const gchar *proStr)
+{
+    mQyncSipe->setBuddyProperty(buddy,
+            QyncSipeUtils::SipeBuddyInfoFieldToQync(property),
+            QString(proStr));
+}
+

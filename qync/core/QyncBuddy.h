@@ -27,11 +27,13 @@ class QyncBuddy : public QObject, public QyncBuddyObject
         QUrl getImageUrl() const;
         void setGroup(const QSharedPointer<const QyncGroup> group);
         void setId(const qint32 id) { mId = id; };
-        const QSharedPointer<const QyncGroup> getGroup() const { return mGroup; }
+        const QSharedPointer<const QyncGroup> getGroup() const { return mGroup; };
 
         //Virtual functions of QyncBuddyObject
         virtual QString getName() const { return mBuddy->mAccount; };
         virtual QString getAlias() const { return mBuddy->mAlias; };
+        virtual QString getGroupName() const;
+        virtual QString getPropertyString(const QyncSipe::BuddyInfoFieldE field) const;
 
     private:
         class Buddy {

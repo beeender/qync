@@ -95,3 +95,14 @@ void QyncBuddy::setGroup(const QSharedPointer<const QyncGroup> group)
     mGroup = group;
 }
 
+
+QString QyncBuddy::getGroupName() const
+{
+    return mGroup->getName();
+}
+
+QString QyncBuddy::getPropertyString(const QyncSipe::BuddyInfoFieldE /*field*/) const
+{
+    return QString();
+}
+

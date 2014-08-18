@@ -121,3 +121,7 @@ void QyncSipeCore::setBuddyPhoto(const QString &buddyName, const QByteArray &img
     }
 }
 
+void QyncSipeCore::setBuddyProperty(const QyncBuddyObject* /*buddy*/, BuddyInfoFieldE /*field*/, const QString &/*proStr*/)
+{
+}
+

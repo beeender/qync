@@ -13,7 +13,7 @@ class QyncGroup: public QObject
     public:
         explicit QyncGroup(const QString &name);
 
-        const QString getName() const { return mName; };
+        QString getName() const { return mName; };
         qint32 getId() const { return mId; };
 
         void setName(const QString &name) { mName = name; };

@@ -25,6 +25,35 @@ class QyncSipe : public QObject
             StatusDND,
         };
 
+        //The values are equaly matched to sipe_buddy_info_fields
+        enum BuddyInfoFieldE
+        {
+            FieldDisplayName = 0,
+            FieldJobTitle,
+            FieldCity,
+            FieldState,
+            FieldOffict,
+            FieldDepartment,
+            FieldCountry,
+            FieldWorkPhone,
+            FieldWorkPhoneDisplay,
+            FieldCompany,
+            FieldEmail,
+            FieldSite,
+            FieldZipcode,
+            FieldStreet,
+            FieldMobilePhone,
+            FieldMobilePhoneDisplay,
+            FieldHomePhone,
+            FieldHomePhoneDisplay,
+            FieldOtherPhone,
+            FieldOtherPhoneDisplay,
+            FieldCustom1Phone,
+            FieldCustom1PhoneDisplay,
+            FieldAlias,
+            FieldDevice
+        };
+
         struct LoginInfo {
             QString accountName;
             QString domainUser;
@@ -48,6 +77,7 @@ class QyncSipe : public QObject
         //The hash sting needs to be hold by the frontend.
         virtual const QByteArray *getBuddyPhotoHash(const QString &buddyName) = 0;
         virtual void setBuddyPhoto(const QString &buddyName, const QByteArray &imgData, const QByteArray &hash) = 0;
+        virtual void setBuddyProperty(const QyncBuddyObject* buddy, BuddyInfoFieldE field, const QString &proStr) = 0;
 
         //Interfaces for the frontend
         void login(const LoginInfo &loginInfo);

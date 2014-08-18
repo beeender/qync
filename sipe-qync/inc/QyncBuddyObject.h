@@ -3,6 +3,8 @@
 
 #include <QSharedPointer>
 
+#include "QyncSipe.h"
+
 class QyncBuddyObject
 {
     public:
@@ -11,8 +13,8 @@ class QyncBuddyObject
         virtual QString getName() const = 0;
         virtual QString getAlias() const = 0;
         virtual QString getServerAlias() const { return getAlias(); };
-        //FIXME: Pure virtual
-        virtual QString getGroupName() const { return ""; };
+        virtual QString getGroupName() const = 0;
+        virtual QString getPropertyString(const QyncSipe::BuddyInfoFieldE field) const = 0;
 
     protected:
         QyncBuddyObject();

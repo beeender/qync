@@ -11,6 +11,7 @@ class QyncSipeUtils {
     public:
     static QyncSipe::LoginStatusE SipeStatusToQync(int status);
     static int QyncStatusToSipe(QyncSipe::LoginStatusE status);
+    static QyncSipe::BuddyInfoFieldE SipeBuddyInfoFieldToQync(const int field);
 };
 #endif
 
