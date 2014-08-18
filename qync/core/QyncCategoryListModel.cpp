@@ -1,6 +1,7 @@
 #define QYNCCATEGORYLISTMODEL_CPP
 
 #include <QQmlEngine>
+#include <algorithm>
 
 #include "QyncCategoryListModel.h"
 #include "QyncBuddy.h"
@@ -51,6 +52,7 @@ void QyncCategoryListModel::addBuddy(const QSharedPointer<QyncBuddy> &buddy)
             bListModel = &cat->mBuddyListModel;
         }
     }
+
     if (!bListModel) {
         qFatal("Cannot find group %s",
             buddy->getGroup()->getName().toStdString().c_str());
@@ -84,23 +86,14 @@ void QyncCategoryListModel::addBuddy(const QSharedPointer<QyncBuddy> &buddy, con
 void QyncCategoryListModel::addGroup(const QSharedPointer<QyncGroup> &group)
 {
     int index;
-
-    for (auto it = mCategoryList.begin(); it != mCategoryList.end(); ++it) {
-        //Ignore the duplicated group.
-        if ((*it)->mGroup == group) return;
-        //Sort the groups by name
-        if ((*it)->mGroup->getName().compare(group->getName()) > 0) {
-            index = mCategoryList.indexOf(*it);
-            beginInsertRows(QModelIndex(), index, index);
-            mCategoryList.insert(it, new Category(group));
-            endInsertRows();
-            return;
-        }
+    auto it = lower_bound(mCategoryList.begin(), mCategoryList.end(), group->getName(), CatPtrStrComparator());
+    if (it == mCategoryList.end()) {
+        index = mCategoryList.size();
+    } else {
+        index = mCategoryList.indexOf(*it);
     }
-
-    index = mCategoryList.size();
     beginInsertRows(QModelIndex(), index, index);
-    mCategoryList.append(new Category(group));
+    mCategoryList.insert(it, new Category(group));
     endInsertRows();
 }
 
@@ -141,9 +134,9 @@ QSharedPointer<QyncBuddy> QyncCategoryListModel::findBuddy(const QString &buddyN
     return buddy;
 }
 
-QList<QyncBuddyObject *> QyncCategoryListModel::findAllBuddies(const QString &buddyName, const QString &groupName)
+QList<const QyncBuddyObject *> QyncCategoryListModel::findAllBuddies(const QString &buddyName, const QString &groupName)
 {
-    QList<QyncBuddyObject *> list;
+    QList<const QyncBuddyObject *> list;
     foreach (auto cat, mCategoryList) {
         if (groupName.isEmpty() || cat->mGroup->getName().compare(groupName) == 0) {
             if (buddyName.isEmpty()) {

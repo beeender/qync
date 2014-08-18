@@ -1,5 +1,7 @@
 #define QYNCBUDDYLISTMODEL_CPP
 
+#include <algorithm>
+
 #include "QyncBuddyListModel.h"
 
 QyncBuddyListModel::QyncBuddyListModel(QObject * /*parent*/)
@@ -37,23 +39,15 @@ QVariant QyncBuddyListModel::data(const QModelIndex & index, int role) const
 void QyncBuddyListModel::addBuddy(const QSharedPointer<QyncBuddy> &buddy)
 {
     int index;
-
-    for (auto it = mBuddyList.begin(); it != mBuddyList.end(); ++it) {
-        //Ignore the duplicated buddy.
-        if ((*it) == buddy) return;
-        //Sort the buddies by name
-        if ((*it)->getAlias().compare(buddy->getAlias()) > 0) {
-            index = mBuddyList.indexOf(*it);
-            beginInsertRows(QModelIndex(), index, index);
-            mBuddyList.insert(it, buddy);
-            endInsertRows();
-            return;
-        }
+    auto it = lower_bound(mBuddyList.begin(), mBuddyList.end(),
+            buddy, QyncBuddy::BuddyNameComparator());
+    if (it == mBuddyList.end()) {
+        index = mBuddyList.size();
+    } else {
+        index = mBuddyList.indexOf(*it);
     }
-
-    index = mBuddyList.size();
     beginInsertRows(QModelIndex(), index, index);
-    mBuddyList.append(buddy);
+    mBuddyList.insert(it, buddy);
     endInsertRows();
 }
 

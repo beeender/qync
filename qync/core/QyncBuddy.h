@@ -60,6 +60,17 @@ class QyncBuddy : public QObject, public QyncBuddyObject
 
     signals:
         void onChanged();
+
+    //Comparators
+    public:
+        struct BuddyNameComparator :
+            public std::binary_function<QSharedPointer<QyncBuddy> &, QSharedPointer<QyncBuddy>, bool> {
+                bool operator()(const QSharedPointer<const QyncBuddy> &lhs,
+                        const QSharedPointer<const QyncBuddy> rhs) const {
+                    return lhs->getName() < rhs->getName();
+                };
+            };
+
 };
 
 #endif // QYNCBUDDY_H

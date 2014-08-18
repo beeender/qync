@@ -51,7 +51,7 @@ class QyncSipeCore : public QyncSipe
         void setStatus(const QyncSipe::LoginStatusE s);
         const QyncBuddy *addBuddy(const QString &buddyName, const QString &alias, const QString &groupName);
         const QyncBuddy *findBuddy(const QString &buddyName, const QString &groupName);
-        const QList<QyncBuddyObject*> findAllBuddies(const QString &buddyName, const QString &groupName);
+        const QList<const QyncBuddyObject*> findAllBuddies(const QString &buddyName, const QString &groupName);
         bool addGroup(const QString &groupName);
         const QByteArray *getBuddyPhotoHash(const QString &buddyName);
         void setBuddyPhoto(const QString &buddyName, const QByteArray &imgData, const QByteArray &hash);

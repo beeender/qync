@@ -30,10 +30,11 @@ bool QyncSipeCore::start()
 
     mDb.init(mAccountName, *mGroupListModel);
 
-    //login(loginInfo);
 
     //FIXME:For testing.
 #if 1
+    login(loginInfo);
+#else
     setStatus(StatusInProcess);
     setStatus(StatusActive);
 #endif
@@ -85,9 +86,9 @@ const QyncBuddy *QyncSipeCore::findBuddy(const QString &buddyName, const QString
     return buddy.data();
 }
 
-const QList<QyncBuddyObject*> QyncSipeCore::findAllBuddies(const QString &buddyName, const QString &groupName)
+const QList<const QyncBuddyObject*> QyncSipeCore::findAllBuddies(const QString &buddyName, const QString &groupName)
 {
-    QList<QyncBuddyObject*> list = mGroupListModel->findAllBuddies(buddyName, groupName);
+    QList<const QyncBuddyObject*> list = mGroupListModel->findAllBuddies(buddyName, groupName);
 
     return list;
 }

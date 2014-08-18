@@ -8,8 +8,8 @@
 #include "QyncBackend.h"
 
 QyncBackend::QyncBackend(QyncSipe *qyncSipe, QObject *parent)
-    :mQyncSipe(qyncSipe), QObject(parent), mDesiredStatus(SIPE_ACTIVITY_UNSET)
-    ,mSipePublic(0)
+    :QObject(parent),
+     mQyncSipe(qyncSipe), mDesiredStatus(SIPE_ACTIVITY_UNSET), mSipePublic(0)
 {
     connect(this, SIGNAL(__login(const QyncSipe::LoginInfo &)), this, SLOT(doLogin(const QyncSipe::LoginInfo &)));
     sipe_core_init("");
@@ -70,10 +70,10 @@ const QyncBuddyObject *QyncBackend::findBuddy(const gchar* buddyName, const gcha
 GSList *QyncBackend::findAllBuddies(const gchar *buddyName, const gchar *groupName)
 {
     GSList *gList = NULL;
-    QList<QyncBuddyObject*> qList = mQyncSipe->findAllBuddies(QString(buddyName), QString(groupName));
+    auto qList = mQyncSipe->findAllBuddies(QString(buddyName), QString(groupName));
 
     foreach(auto it, qList) {
-        gList = g_slist_append(gList, it);
+        gList = g_slist_append(gList, const_cast<QyncBuddyObject *>(it));
     }
 
     return gList;

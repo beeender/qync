@@ -35,7 +35,7 @@ public:
     QSharedPointer<QyncBuddy> findBuddy(const QString &buddyName);
     //This will traverse all buddies.
     //If buddyName or groupName is empty, it will return all buddies.
-    QList<QyncBuddyObject *> findAllBuddies(const QString &buddyName, const QString &groupName);
+    QList<const QyncBuddyObject *> findAllBuddies(const QString &buddyName, const QString &groupName);
 
     //QML calls
     Q_INVOKABLE QObject *getBuddyListModel(int index);
@@ -45,10 +45,19 @@ private:
         Category(const QSharedPointer<QyncGroup> group) : mGroup(group) {};
         QSharedPointer<QyncGroup> mGroup;
         QyncBuddyListModel mBuddyListModel;
-        const QString getName() { return mGroup->getName(); };
+        const QString getName() const { return mGroup->getName(); };
     };
 
+private:
     QList<Category *> mCategoryList;
+
+private:
+    //Comparator to compare the category name and given string (could be the group name).
+    struct CatPtrStrComparator : public std::binary_function<const Category *, const QString &, bool> {
+        bool operator()(const Category *lhs, const QString &rhs) const {
+            return lhs->getName() < rhs;
+        };
+    };
 };
 
 #endif

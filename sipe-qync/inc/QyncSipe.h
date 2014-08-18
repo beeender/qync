@@ -42,7 +42,7 @@ class QyncSipe : public QObject
         virtual void setStatus(const LoginStatusE s) = 0;
         virtual const QyncBuddyObject *addBuddy(const QString &buddyName, const QString &alias, const QString &groupName) = 0;
         virtual const QyncBuddyObject *findBuddy(const QString &buddyName, const QString &groupName) = 0;
-        virtual const QList<QyncBuddyObject*> findAllBuddies(const QString &buddyName, const QString &groupName) = 0;
+        virtual const QList<const QyncBuddyObject*> findAllBuddies(const QString &buddyName, const QString &groupName) = 0;
         virtual bool addGroup(const QString &group) = 0;
         //Return hash string which is corresponding the given buddy.
         //The hash sting needs to be hold by the frontend.
