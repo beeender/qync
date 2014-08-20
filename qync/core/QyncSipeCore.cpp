@@ -81,7 +81,7 @@ const QyncBuddy *QyncSipeCore::findBuddy(const QString &buddyName, const QString
     QSharedPointer<QyncBuddy> buddy =
         mGroupListModel->findBuddy(buddyName, groupName);
 
-    if (buddy.isNull()) return NULL;
+    if (buddy.isNull()) return nullptr;
 
     return buddy.data();
 }

@@ -160,12 +160,17 @@ void sipe_backend_buddy_request_authorization(struct sipe_core_public * /*sipe_p
     SIPE_DEBUG_INFO("STUB %s", __func__);
 }
 
-gboolean sipe_backend_buddy_is_blocked(struct sipe_core_public * /*sipe_public*/,
+gboolean sipe_backend_buddy_is_blocked(struct sipe_core_public *sipe_public,
         const gchar *who)
 {
     SIPE_DEBUG_INFO("%s", __func__);
-    QyncBuddyObject* buddy = (QyncBuddyObject *)who;
-    return buddy->isBlocked();
+
+    QyncBackend *backend = (QyncBackend *)sipe_public->backend_private;
+    const QyncBuddyObject* buddy = backend->findBuddy(who, nullptr);
+
+    if (buddy) return buddy->isBlocked();
+
+    return FALSE;
 }
 
 void sipe_backend_buddy_set_blocked_status(struct sipe_core_public * /*sipe_public*/,
