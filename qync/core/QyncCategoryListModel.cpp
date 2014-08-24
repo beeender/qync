@@ -2,6 +2,7 @@
 
 #include <QQmlEngine>
 #include <algorithm>
+#include <iterator>
 
 #include "QyncCategoryListModel.h"
 #include "QyncBuddy.h"
@@ -137,12 +138,14 @@ QSharedPointer<QyncBuddy> QyncCategoryListModel::findBuddy(const QString &buddyN
 QList<const QyncBuddyObject *> QyncCategoryListModel::findAllBuddies(const QString &buddyName, const QString &groupName)
 {
     QList<const QyncBuddyObject *> list;
-    foreach (auto cat, mCategoryList) {
+    foreach (auto &cat, mCategoryList) {
         if (groupName.isEmpty() || cat->mGroup->getName().compare(groupName) == 0) {
             if (buddyName.isEmpty()) {
-                foreach (auto buddy, cat->mBuddyListModel.getAllBuddies()) {
-                    list.append(buddy.data());
-                }
+                auto &tmpList = cat->mBuddyListModel.getAllBuddies();
+                transform(tmpList.begin(), tmpList.end(), std::back_inserter(list),
+                        [](QSharedPointer<QyncBuddy> b) {
+                            return b.data();
+                        });
             } else {
                 auto buddy = cat->mBuddyListModel.findBuddy(buddyName);
                 if (!buddy.isNull()) list.append(buddy.data());
