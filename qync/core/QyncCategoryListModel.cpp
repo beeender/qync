@@ -14,7 +14,7 @@ QyncCategoryListModel::QyncCategoryListModel(QObject * /*parent*/)
 
 QyncCategoryListModel::~QyncCategoryListModel()
 {
-    foreach(auto cat, mCategoryList) {
+    foreach(auto &cat, mCategoryList) {
         delete cat;
     }
     mCategoryList.clear();
@@ -47,19 +47,15 @@ QVariant QyncCategoryListModel::data(const QModelIndex & index, int role) const
 
 void QyncCategoryListModel::addBuddy(const QSharedPointer<QyncBuddy> &buddy)
 {
-    QyncBuddyListModel *bListModel = nullptr;
-    foreach(auto cat, mCategoryList) {
-        if (cat->mGroup == buddy->getGroup()) {
-            bListModel = &cat->mBuddyListModel;
-        }
-    }
-
-    if (!bListModel) {
+    auto it = std::find_if(mCategoryList.begin(), mCategoryList.end(),
+            [&buddy](const Category *cat) {
+                return (cat->mGroup == buddy->getGroup());
+            });
+    if (it == mCategoryList.end()) {
         qFatal("Cannot find group %s",
             buddy->getGroup()->getName().toStdString().c_str());
     }
-
-    bListModel->addBuddy(buddy);
+    (*it)->mBuddyListModel.addBuddy(buddy);
 }
 
 void QyncCategoryListModel::addBuddy(const QSharedPointer<QyncBuddy> &buddy, const QString &groupName)
@@ -69,19 +65,17 @@ void QyncCategoryListModel::addBuddy(const QSharedPointer<QyncBuddy> &buddy, con
                 buddy->getName().toStdString().c_str());
     }
 
-    QyncBuddyListModel *bListModel = nullptr;
-    foreach(auto cat, mCategoryList) {
-        if (cat->mGroup->getName().compare(groupName) == 0) {
-            bListModel = &cat->mBuddyListModel;
-            buddy->setGroup(cat->mGroup);
-        }
-    }
-    if (!bListModel) {
+    auto it = std::find_if(mCategoryList.begin(), mCategoryList.end(),
+            [&groupName](const Category *cat){
+                return (cat->getName().compare(groupName) == 0);
+            });
+    if (it == mCategoryList.end()) {
         qFatal("Cannot find group %s",
             buddy->getGroup()->getName().toStdString().c_str());
     }
 
-    bListModel->addBuddy(buddy);
+    buddy->setGroup((*it)->mGroup);
+    (*it)->mBuddyListModel.addBuddy(buddy);
 }
 
 void QyncCategoryListModel::addGroup(const QSharedPointer<QyncGroup> &group)
@@ -100,36 +94,34 @@ void QyncCategoryListModel::addGroup(const QSharedPointer<QyncGroup> &group)
 
 QSharedPointer<QyncGroup> QyncCategoryListModel::findGroup(const QString &groupName)
 {
-    foreach(auto i, mCategoryList) {
-        if (i->getName().compare(groupName) == 0) {
-            return i->mGroup;
-        }
-    }
+    auto it = std::find_if(mCategoryList.begin(), mCategoryList.end(),
+            [&groupName](const Category *cat) {
+                return (cat->getName().compare(groupName) == 0);
+            });
+    if (it == mCategoryList.end()) return QSharedPointer<QyncGroup>();
 
-    return QSharedPointer<QyncGroup>();
+    return (*it)->mGroup;
 }
 
 QSharedPointer<QyncBuddy> QyncCategoryListModel::findBuddy(const QString &buddyName, const QString &groupName)
 {
-    QyncBuddyListModel *bListModel = nullptr;
-    foreach(auto cat, mCategoryList) {
-        if (cat->mGroup->getName().compare(groupName) == 0) {
-            bListModel = &cat->mBuddyListModel;
-        }
-    }
+    auto it = std::find_if(mCategoryList.begin(), mCategoryList.end(),
+            [&groupName](const Category *cat) {
+                return (cat->mGroup->getName().compare(groupName) == 0);
+            });
+    if (it == mCategoryList.end()) return QSharedPointer<QyncBuddy>();
 
-    if (!bListModel) return QSharedPointer<QyncBuddy>();
-
-    return bListModel->findBuddy(buddyName);
+    return (*it)->mBuddyListModel.findBuddy(buddyName);
 }
 
 QSharedPointer<QyncBuddy> QyncCategoryListModel::findBuddy(const QString &buddyName)
 {
     QSharedPointer<QyncBuddy> buddy;
-    foreach(auto cat, mCategoryList) {
+    foreach (auto &cat, mCategoryList) {
         auto b = cat->mBuddyListModel.findBuddy(buddyName);
         if (b.isNull()) continue;
         buddy = b;
+        break;
     }
 
     return buddy;

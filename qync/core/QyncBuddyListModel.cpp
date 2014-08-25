@@ -53,10 +53,12 @@ void QyncBuddyListModel::addBuddy(const QSharedPointer<QyncBuddy> &buddy)
 
 QSharedPointer<QyncBuddy> QyncBuddyListModel::findBuddy(const QString &name) const
 {
-    foreach(auto it, mBuddyList) {
-        if (it->getName().compare(name) == 0) {
-            return it;
-        }
-    }
+    auto it = std::find_if(mBuddyList.begin(), mBuddyList.end(),
+            [&name](const QSharedPointer<QyncBuddy> &b) {
+                return (b->getName().compare(name) == 0);
+            });
+
+    if(it != mBuddyList.end()) return (*it);
     return QSharedPointer<QyncBuddy>();
 }
+
