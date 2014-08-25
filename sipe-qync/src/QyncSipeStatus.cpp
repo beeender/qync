@@ -4,16 +4,19 @@
 #include "sipe-backend.h"
 #include "QyncBackend.h"
 
-guint sipe_backend_status(struct sipe_core_public *sipe_public)
+guint sipe_backend_status(struct sipe_core_public * /*sipe_public*/)
 {
-	SIPE_DEBUG_INFO_NOFORMAT("STUB sipe_backend_status");
+    SIPE_DEBUG_INFO_NOFORMAT("STUB sipe_backend_status");
+
+    //FIXME: For testing
+    return SIPE_ACTIVITY_INVISIBLE;
 }
 
 gboolean sipe_backend_status_changed(struct sipe_core_public *sipe_public,
-				     guint activity,
-				     const gchar *message)
+        guint activity,
+        const gchar * /*message*/)
 {
-	SIPE_DEBUG_INFO_NOFORMAT("sipe_backend_status_changed");
+    SIPE_DEBUG_INFO_NOFORMAT("sipe_backend_status_changed");
     QyncBackend *backend = (QyncBackend *)sipe_public->backend_private;
     if (backend->getDesiredStatus() == activity) return FALSE;
 
@@ -21,10 +24,10 @@ gboolean sipe_backend_status_changed(struct sipe_core_public *sipe_public,
 }
 
 void sipe_backend_status_and_note(struct sipe_core_public *sipe_public,
-				  guint activity,
-				  const gchar *message)
+        guint activity,
+        const gchar * /*message*/)
 {
-	SIPE_DEBUG_INFO_NOFORMAT("sipe_backend_status_and_note");
+    SIPE_DEBUG_INFO_NOFORMAT("sipe_backend_status_and_note");
     QyncBackend *backend = (QyncBackend *)sipe_public->backend_private;
     backend->setStatus(activity);
 }

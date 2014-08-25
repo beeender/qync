@@ -12,42 +12,43 @@ class QyncSipeTransport : QObject
 {
     Q_OBJECT
 
-    public:
-        QyncSipeTransport(struct sipe_core_public *sipe_public,
-                const sipe_connect_setup *setup, QObject *parent = 0);
-        ~QyncSipeTransport();
+public:
+    QyncSipeTransport(struct sipe_core_public *sipe_public,
+            const sipe_connect_setup *setup, QObject *parent = 0);
+    ~QyncSipeTransport();
 
-        struct SipeTransportConnection {
-            //public part shared with core
-            struct sipe_transport_connection pub;
+    struct SipeTransportConnection {
+        //public part shared with core
+        struct sipe_transport_connection pub;
 
-            //QyncSipeTransport instance to this
-            QyncSipeTransport *thiz;
-        };
+        //QyncSipeTransport instance to this
+        QyncSipeTransport *thiz;
+    };
 
-        struct SipeTransportConnection *getSipeTransportConnection()
-            { return &mSipeTransportCon; };
+    struct SipeTransportConnection *getSipeTransportConnection()
+    { return &mSipeTransportCon; };
 
-        void write(const char *data);
-        void flush();
-    private:
-        struct sipe_core_public *mSipeCorePublic;
-        sipe_connect_setup mConSetup;
-        struct SipeTransportConnection mSipeTransportCon;
+    void write(const char *data);
+    void flush();
 
-        QSslSocket mSocket;
-        QVector<char> mReadBuf;
+private:
+    struct sipe_core_public *mSipeCorePublic;
+    sipe_connect_setup mConSetup;
+    struct SipeTransportConnection mSipeTransportCon;
+
+    QSslSocket mSocket;
+    QVector<char> mReadBuf;
     private slots:
         void onSocketReady();
-        void onReadyRead();
-        void onDisconnected();
-        void onError(QAbstractSocket::SocketError socketError);
-        void onStateChanged(QAbstractSocket::SocketState socketState);
+    void onReadyRead();
+    void onDisconnected();
+    void onError(QAbstractSocket::SocketError socketError);
+    void onStateChanged(QAbstractSocket::SocketState socketState);
 };
 
 QyncSipeTransport::QyncSipeTransport(struct sipe_core_public *sipe_public,
         const sipe_connect_setup *setup, QObject *parent)
-    :QObject(parent), mSipeCorePublic(sipe_public), mConSetup(*setup)
+:QObject(parent), mSipeCorePublic(sipe_public), mConSetup(*setup)
 {
     std::memset(&mSipeTransportCon, 0, sizeof(mSipeTransportCon));
     mSipeTransportCon.thiz = this;
@@ -140,27 +141,27 @@ struct sipe_transport_connection *sipe_backend_transport_connect(
         struct sipe_core_public *sipe_public,
         const sipe_connect_setup *setup)
 {
-	SIPE_DEBUG_INFO("sipe_backend_transport_connect: 0x%08x", setup);
+    SIPE_DEBUG_INFO_NOFORMAT("sipe_backend_transport_connect");
     QyncSipeTransport *q_sipe_trans = new QyncSipeTransport(sipe_public, setup);
     return (struct sipe_transport_connection *)q_sipe_trans->getSipeTransportConnection();
 }
 
 void sipe_backend_transport_disconnect(struct sipe_transport_connection *conn)
 {
-	SIPE_DEBUG_INFO_NOFORMAT("sipe_backend_transport_disconnect");
+    SIPE_DEBUG_INFO_NOFORMAT("sipe_backend_transport_disconnect");
     delete ((QyncSipeTransport::SipeTransportConnection *)conn)->thiz;
 }
 
 void sipe_backend_transport_message(struct sipe_transport_connection *conn,
-				    const gchar *buffer)
+        const gchar *buffer)
 {
-	SIPE_DEBUG_INFO_NOFORMAT("sipe_backend_transport_message");
+    SIPE_DEBUG_INFO_NOFORMAT("sipe_backend_transport_message");
     ((QyncSipeTransport::SipeTransportConnection *)conn)->thiz->write(buffer);
 }
 
 void sipe_backend_transport_flush(struct sipe_transport_connection *conn)
 {
-	SIPE_DEBUG_INFO_NOFORMAT("sipe_backend_transport_flush");
+    SIPE_DEBUG_INFO_NOFORMAT("sipe_backend_transport_flush");
     ((QyncSipeTransport::SipeTransportConnection *)conn)->thiz->flush();
 }
 

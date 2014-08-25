@@ -2,68 +2,69 @@
 
 #include "sipe-backend.h"
 
-void sipe_backend_ft_error(struct sipe_file_transfer *ft,
-			   const gchar *errmsg)
+void sipe_backend_ft_error(struct sipe_file_transfer * /*ft*/,
+        const gchar * /*errmsg*/)
 {
-	SIPE_DEBUG_INFO_NOFORMAT("STUB sipe_backend_ft_error");
+    SIPE_DEBUG_INFO_NOFORMAT("STUB sipe_backend_ft_error");
 }
 
-const gchar *sipe_backend_ft_get_error(struct sipe_file_transfer *ft)
+const gchar *sipe_backend_ft_get_error(struct sipe_file_transfer * /*ft*/)
 {
-	SIPE_DEBUG_INFO_NOFORMAT("STUB sipe_backend_ft_get_error");
-    return "";
+    SIPE_DEBUG_INFO_NOFORMAT("STUB sipe_backend_ft_get_error");
+    return g_strdup("");
 }
 
-void sipe_backend_ft_deallocate(struct sipe_file_transfer *ft)
+void sipe_backend_ft_deallocate(struct sipe_file_transfer * /*ft*/)
 {
-	SIPE_DEBUG_INFO_NOFORMAT("STUB sipe_backend_ft_deallocate");
+    SIPE_DEBUG_INFO_NOFORMAT("STUB sipe_backend_ft_deallocate");
 }
 
-gssize sipe_backend_ft_read(struct sipe_file_transfer *ft,
-			    guchar *data,
-			    gsize size)
+gssize sipe_backend_ft_read(struct sipe_file_transfer * /*ft*/,
+        guchar * /*data*/,
+        gsize /*size*/)
 {
-	SIPE_DEBUG_INFO_NOFORMAT("STUB sipe_backend_ft_read");
+    SIPE_DEBUG_INFO_NOFORMAT("STUB sipe_backend_ft_read");
     return 0;
 }
 
-gssize sipe_backend_ft_write(struct sipe_file_transfer *ft,
-			     const guchar *data,
-			     gsize size)
+gssize sipe_backend_ft_write(struct sipe_file_transfer * /*ft*/,
+        const guchar * /*data*/,
+        gsize /*size*/)
 {
-	SIPE_DEBUG_INFO_NOFORMAT("STUB sipe_backend_ft_write");
+    SIPE_DEBUG_INFO_NOFORMAT("STUB sipe_backend_ft_write");
+    return 0;
 }
 
 
-void sipe_backend_ft_cancel_local(struct sipe_file_transfer *ft)
+void sipe_backend_ft_cancel_local(struct sipe_file_transfer * /*ft*/)
 {
-	SIPE_DEBUG_INFO_NOFORMAT("STUB sipe_backend_ft_cancel_local");
+    SIPE_DEBUG_INFO_NOFORMAT("STUB sipe_backend_ft_cancel_local");
 }
 
-void sipe_backend_ft_cancel_remote(struct sipe_file_transfer *ft)
+void sipe_backend_ft_cancel_remote(struct sipe_file_transfer * /*ft*/)
 {
-	SIPE_DEBUG_INFO_NOFORMAT("STUB sipe_backend_ft_cancel_remote");
+    SIPE_DEBUG_INFO_NOFORMAT("STUB sipe_backend_ft_cancel_remote");
 }
 
-void sipe_backend_ft_incoming(struct sipe_core_public *sipe_public,
-			      struct sipe_file_transfer *ft,
-			      const gchar *who,
-			      const gchar *file_name,
-			      gsize file_size)
+void sipe_backend_ft_incoming(struct sipe_core_public * /*sipe_public*/,
+        struct sipe_file_transfer * /*ft*/,
+        const gchar * /*who*/,
+        const gchar * /*file_name*/,
+        gsize /*file_size*/)
 {
-	SIPE_DEBUG_INFO_NOFORMAT("STUB sipe_backend_ft_incoming");
+    SIPE_DEBUG_INFO_NOFORMAT("STUB sipe_backend_ft_incoming");
 }
 
-void sipe_backend_ft_start(struct sipe_file_transfer *ft,
-			   struct sipe_backend_fd *fd,
-			   const char* ip, unsigned port)
+void sipe_backend_ft_start(struct sipe_file_transfer * /*ft*/,
+        struct sipe_backend_fd * /*fd*/,
+        const char* /*ip*/, unsigned /*port*/)
 {
-	SIPE_DEBUG_INFO_NOFORMAT("STUB sipe_backend_ft_start");
+    SIPE_DEBUG_INFO_NOFORMAT("STUB sipe_backend_ft_start");
 }
 
-gboolean sipe_backend_ft_is_incoming(struct sipe_file_transfer *ft)
+gboolean sipe_backend_ft_is_incoming(struct sipe_file_transfer * /*ft*/)
 {
-	SIPE_DEBUG_INFO_NOFORMAT("STUB sipe_backend_ft_is_incoming");
+    SIPE_DEBUG_INFO_NOFORMAT("STUB sipe_backend_ft_is_incoming");
     return FALSE;
 }
 
