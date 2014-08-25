@@ -22,7 +22,7 @@ class QyncBackend: public QObject
         const QyncBuddyObject *addBuddy(const gchar *buddyName, const gchar *alias, const gchar *groupName);
         const gchar *getBuddyPhotoHash(const gchar *buddyName);
         void setBuddyPhoto(const gchar *buddyName, gpointer imgData, const gsize imgSize, const gchar *imgHash);
-        void setBuddyProperty(const QyncBuddyObject *buddy, const int property, const gchar *proStr);
+        void setBuddyProperty(QyncBuddyObject *buddy, const int property, const gchar *proStr);
 
     signals:
         //Signals should only be emitted by QyncSipe

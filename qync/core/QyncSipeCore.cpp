@@ -121,7 +121,9 @@ void QyncSipeCore::setBuddyPhoto(const QString &buddyName, const QByteArray &img
     }
 }
 
-void QyncSipeCore::setBuddyProperty(const QyncBuddyObject* /*buddy*/, BuddyInfoFieldE /*field*/, const QString &/*proStr*/)
+void QyncSipeCore::setBuddyProperty(QyncBuddyObject* buddyObj, BuddyInfoFieldE field, const QString &proStr)
 {
+    QyncBuddy *buddy = dynamic_cast<QyncBuddy *>(buddyObj);
+    buddy->setPropertyString(field, proStr);
 }
 

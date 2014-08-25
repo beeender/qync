@@ -101,8 +101,13 @@ QString QyncBuddy::getGroupName() const
     return mGroup->getName();
 }
 
-QString QyncBuddy::getPropertyString(const QyncSipe::BuddyInfoFieldE /*field*/) const
+QString QyncBuddy::getPropertyString(const QyncSipe::BuddyInfoFieldE field) const
 {
-    return QString();
+    return mBuddy->mPropMap.value(field);
+}
+
+void QyncBuddy::setPropertyString(const QyncSipe::BuddyInfoFieldE field, const QString &str)
+{
+    mBuddy->mPropMap[field] = str;
 }
 

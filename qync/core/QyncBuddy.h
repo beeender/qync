@@ -6,6 +6,7 @@
 #include <QList>
 #include <QByteArray>
 #include <QUrl>
+#include <QMap>
 
 #include "QyncBuddyObject.h"
 
@@ -28,6 +29,7 @@ class QyncBuddy : public QObject, public QyncBuddyObject
         void setGroup(const QSharedPointer<const QyncGroup> group);
         void setId(const qint32 id) { mId = id; };
         const QSharedPointer<const QyncGroup> getGroup() const { return mGroup; };
+        void setPropertyString(const QyncSipe::BuddyInfoFieldE field, const QString &str);
 
         //Virtual functions of QyncBuddyObject
         virtual QString getName() const { return mBuddy->mAccount; };
@@ -46,6 +48,7 @@ class QyncBuddy : public QObject, public QyncBuddyObject
             QString mAccount;
             QString mAlias;
             QByteArray mImageName;
+            QMap<QyncSipe::BuddyInfoFieldE, QString> mPropMap;
 
             private:
             Buddy(const QString &account);
