@@ -78,6 +78,8 @@ class QyncSipe : public QObject
         virtual const QByteArray *getBuddyPhotoHash(const QString &buddyName) = 0;
         virtual void setBuddyPhoto(const QString &buddyName, const QByteArray &imgData, const QByteArray &hash) = 0;
         virtual void setBuddyProperty(QyncBuddyObject* buddy, const BuddyInfoFieldE field, const QString &proStr) = 0;
+        //To trigger buddy UI update. This will be called when one or more buddy settings update
+        virtual void updateBuddy(const QString &buddyName) = 0;
 
         //Interfaces for the frontend
         void login(const LoginInfo &loginInfo);

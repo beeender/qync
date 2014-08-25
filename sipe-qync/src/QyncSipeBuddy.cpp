@@ -86,10 +86,12 @@ void sipe_backend_buddy_set_string(struct sipe_core_public *sipe_public,
     backend->setBuddyProperty(static_cast<QyncBuddyObject*>(buddy), key, val);
 }
 
-void sipe_backend_buddy_refresh_properties(struct sipe_core_public * /*sipe_public*/,
-        const gchar * /*uri*/)
+void sipe_backend_buddy_refresh_properties(struct sipe_core_public *sipe_public,
+        const gchar *uri)
 {
-    SIPE_DEBUG_INFO("STUB %s", __func__);
+    SIPE_DEBUG_INFO("%s", __func__);
+    QyncBackend *backend = reinterpret_cast<QyncBackend *>(sipe_public->backend_private);
+    backend->updateBuddy(uri);
 }
 
 guint sipe_backend_buddy_get_status(struct sipe_core_public * /*sipe_public*/,
@@ -180,11 +182,15 @@ void sipe_backend_buddy_set_blocked_status(struct sipe_core_public * /*sipe_publ
     SIPE_DEBUG_INFO("STUB %s", __func__);
 }
 
-void sipe_backend_buddy_set_status(struct sipe_core_public * /*sipe_public*/,
-        const gchar * /*who*/,
-        guint /*activity*/)
+void sipe_backend_buddy_set_status(struct sipe_core_public * sipe_public,
+        const gchar *who,
+        guint activity)
 {
-    SIPE_DEBUG_INFO("STUB %s", __func__);
+    SIPE_DEBUG_INFO("%s", __func__);
+
+    QyncBackend *backend = reinterpret_cast<QyncBackend *>(sipe_public->backend_private);
+    QyncBuddyObject* buddy = const_cast<QyncBuddyObject*>(backend->findBuddy(who, nullptr));
+    if (buddy) buddy->setStatus(QyncSipeUtils::SipeStatusToQync(activity));
 }
 
 gboolean sipe_backend_uses_photo(void)

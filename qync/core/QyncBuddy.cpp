@@ -9,7 +9,7 @@
 QList< QWeakPointer<QyncBuddy::Buddy> > QyncBuddy::Buddy::mBuddyPool;
 
 QyncBuddy::Buddy::Buddy(const QString &account) :
-    mAccount(account), mAlias(), mImageName()
+    mAccount(account), mAlias(), mImageName(), mStatus(QyncSipe::StatusOffline)
 {
 }
 
@@ -53,13 +53,13 @@ QSharedPointer<QyncBuddy::Buddy> QyncBuddy::Buddy::create(const QString &account
 
 
 QyncBuddy::QyncBuddy(const QString &account, QObject *parent) :
-    QObject(parent), QyncBuddyObject(), mBuddy(Buddy::create(account)),
+    QyncBuddyObject(parent), mBuddy(Buddy::create(account)),
     mGroup(), mId()
 {
 }
 
 QyncBuddy::QyncBuddy(QSharedPointer<Buddy> buddy, QObject *parent) :
-    QObject(parent), QyncBuddyObject(), mBuddy(buddy)
+    QyncBuddyObject(parent), mBuddy(buddy)
 {
 }
 
@@ -109,5 +109,15 @@ QString QyncBuddy::getPropertyString(const QyncSipe::BuddyInfoFieldE field) cons
 void QyncBuddy::setPropertyString(const QyncSipe::BuddyInfoFieldE field, const QString &str)
 {
     mBuddy->mPropMap[field] = str;
+}
+
+void QyncBuddy::setStatus(const QyncSipe::LoginStatusE status)
+{
+    mBuddy->mStatus = status;
+}
+
+QyncSipe::LoginStatusE QyncBuddy::getStatus() const
+{
+    return mBuddy->mStatus;
 }
 

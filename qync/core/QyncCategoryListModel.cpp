@@ -105,6 +105,8 @@ QSharedPointer<QyncGroup> QyncCategoryListModel::findGroup(const QString &groupN
 
 QSharedPointer<QyncBuddy> QyncCategoryListModel::findBuddy(const QString &buddyName, const QString &groupName)
 {
+    if (groupName.isEmpty()) return findBuddy(buddyName);
+
     auto it = std::find_if(mCategoryList.begin(), mCategoryList.end(),
             [&groupName](const Category *cat) {
                 return (cat->mGroup->getName().compare(groupName) == 0);

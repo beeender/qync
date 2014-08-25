@@ -105,3 +105,8 @@ void QyncBackend::setBuddyProperty(QyncBuddyObject *buddy, const int property, c
             QString(proStr));
 }
 
+void QyncBackend::updateBuddy(const gchar *buddyName)
+{
+    mQyncSipe->updateBuddy(QString(buddyName));
+}
+

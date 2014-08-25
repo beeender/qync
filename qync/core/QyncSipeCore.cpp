@@ -127,3 +127,12 @@ void QyncSipeCore::setBuddyProperty(QyncBuddyObject* buddyObj, BuddyInfoFieldE f
     buddy->setPropertyString(field, proStr);
 }
 
+void QyncSipeCore::updateBuddy(const QString &buddyName)
+{
+    auto bList = mGroupListModel->findAllBuddies(buddyName, QString());
+    for (auto b : bList) {
+        //FIXME: findAllBuddies should not return a const list.
+        emit const_cast<QyncBuddyObject *>(b)->onChanged();
+    }
+}
+

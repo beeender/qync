@@ -11,12 +11,10 @@
 #include "QyncBuddyObject.h"
 
 class QyncGroup;
-class QyncBuddy : public QObject, public QyncBuddyObject
+class QyncBuddy : public QyncBuddyObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString account READ getName NOTIFY onChanged)
-    Q_PROPERTY(QString alias READ getAlias NOTIFY onChanged)
-    Q_PROPERTY(QUrl imageUrl READ getImageUrl NOTIFY onChanged)
+    Q_PROPERTY(QUrl imageUrl READ getImageUrl)
 
     public:
         explicit QyncBuddy(const QString &account, QObject *parent = 0);
@@ -36,6 +34,8 @@ class QyncBuddy : public QObject, public QyncBuddyObject
         virtual QString getAlias() const { return mBuddy->mAlias; };
         virtual QString getGroupName() const;
         virtual QString getPropertyString(const QyncSipe::BuddyInfoFieldE field) const;
+        virtual void setStatus(const QyncSipe::LoginStatusE status);
+        virtual QyncSipe::LoginStatusE getStatus() const;
 
     private:
         class Buddy {
@@ -49,6 +49,7 @@ class QyncBuddy : public QObject, public QyncBuddyObject
             QString mAlias;
             QByteArray mImageName;
             QMap<QyncSipe::BuddyInfoFieldE, QString> mPropMap;
+            QyncSipe::LoginStatusE mStatus;
 
             private:
             Buddy(const QString &account);
@@ -62,9 +63,6 @@ class QyncBuddy : public QObject, public QyncBuddyObject
         QSharedPointer<Buddy> mBuddy;
         QSharedPointer<const QyncGroup> mGroup;
         qint32 mId;
-
-    signals:
-        void onChanged();
 
     //Comparators
     public:

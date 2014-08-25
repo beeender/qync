@@ -2,7 +2,7 @@
 
 #include "QyncBuddyObject.h"
 
-QyncBuddyObject::QyncBuddyObject()
+QyncBuddyObject::QyncBuddyObject(QObject *parent) : QObject(parent)
 {
 }
 

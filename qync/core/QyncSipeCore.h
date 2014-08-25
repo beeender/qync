@@ -56,6 +56,7 @@ class QyncSipeCore : public QyncSipe
         const QByteArray *getBuddyPhotoHash(const QString &buddyName);
         void setBuddyPhoto(const QString &buddyName, const QByteArray &imgData, const QByteArray &hash);
         void setBuddyProperty(QyncBuddyObject* buddy, const BuddyInfoFieldE field, const QString &proStr);
+        void updateBuddy(const QString &buddyName);
 
     private slots:
 
